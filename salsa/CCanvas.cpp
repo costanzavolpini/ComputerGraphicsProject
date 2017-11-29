@@ -43,7 +43,7 @@ void CCanvas::initializeGL() {
      * Before you can use OBJ/PLY model, you need to initialize it by calling init() method.
      */
 //    textureTrain.setTexture();
-    modelTrain.init();
+    eagleModel.init();
 
     // do not use PLY
 //    modelTrain2.init();
@@ -193,7 +193,7 @@ void CCanvas::paintGL() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Setup the current view
     setView(View::Perspective);
@@ -251,8 +251,12 @@ void CCanvas::paintGL() {
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
 
+    // rotate Eagle (debug)
+    tau += 1.0f;
+    glRotatef(tau, 0.0f, 1.0f, 0.0f);
+
     // Look at the ObjModel class to see how the drawing is done
-    modelTrain.draw();
+    eagleModel.draw();
     // Look at the PlyModel class to see how the drawing is done
     /*
      * The models you load can have different scales. If you are drawing a proper model but nothing
