@@ -2,6 +2,7 @@
 #define Point2d_H
 
 #include <cassert>
+#include <cmath>
 
 /***************************************************************************
 Point2d.h

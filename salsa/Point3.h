@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <cmath>
 
 /***************************************************************************
 Point.h
