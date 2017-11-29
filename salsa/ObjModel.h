@@ -1,18 +1,17 @@
 #ifndef OBJMODEL_H
 #define OBJMODEL_H
 
-#include <QtOpenGL>
-#include "Point3.h"
 #include "Point2.h"
+#include "Point3.h"
+#include <QtOpenGL>
 
-class ObjModel
-{
-public:
+class ObjModel {
+  public:
     ObjModel(const std::string &_path);
     void init();
     void draw();
 
-private:
+  private:
     std::vector<GLfloat> fvertices;
     std::vector<GLfloat> fuvs;
     std::vector<GLfloat> fnormals; // Won't be used at the moment

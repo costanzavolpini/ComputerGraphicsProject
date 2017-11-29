@@ -2,16 +2,15 @@
 /* simple image viewer using qt                                         */
 /************************************************************************/
 
-#include <QtGui>
 #include "GLRender.h"
+#include <QtGui>
 #include <iostream>
 
 /************************************************************************/
 /* setup the UI                                                         */
 /************************************************************************/
-GLRender::GLRender(QWidget *parent,Qt::WindowFlags flags)
-    : QMainWindow(parent, flags)
-{
+GLRender::GLRender(QWidget *parent, Qt::WindowFlags flags)
+    : QMainWindow(parent, flags) {
     setupUi(this);
 
     setupConnections();
@@ -22,16 +21,14 @@ GLRender::GLRender(QWidget *parent,Qt::WindowFlags flags)
 /************************************************************************/
 /*                                                                      */
 /************************************************************************/
-GLRender::~GLRender()
-{ 
+GLRender::~GLRender() {
     // if (canvas) delete canvas;
 }
 
 /************************************************************************/
 /* setup connections                                                    */
 /************************************************************************/
-void GLRender::setupConnections() 
-{
+void GLRender::setupConnections() {
     connect(actionLoad, SIGNAL(triggered()), this, SLOT(loadImage()));
     connect(actionSave, SIGNAL(triggered()), this, SLOT(saveImage()));
 }
@@ -39,21 +36,21 @@ void GLRender::setupConnections()
 /************************************************************************/
 /* load an Image                                                        */
 /************************************************************************/
-void GLRender::loadImage()
-{
+void GLRender::loadImage() {
     QString fname = QFileDialog::getOpenFileName(this, "Open File", ".", knownFileTypes);
 
-    if(!fname.isEmpty()) { /* canvas->load(fname); */ }
-    else QMessageBox::critical(this, "Error Message", "error loading file");
+    if (!fname.isEmpty()) { /* canvas->load(fname); */
+    } else
+        QMessageBox::critical(this, "Error Message", "error loading file");
 }
 
 /************************************************************************/
 /* save an Image                                                        */
 /************************************************************************/
-void GLRender::saveImage()
-{  
+void GLRender::saveImage() {
     QString fname = QFileDialog::getSaveFileName(this, "Save File", ".", knownFileTypes);
 
-    if(!fname.isEmpty()) { /* canvas->save(fname); */ }
-    else QMessageBox::critical(this, "Error Message", "error saving mesh");
+    if (!fname.isEmpty()) { /* canvas->save(fname); */
+    } else
+        QMessageBox::critical(this, "Error Message", "error saving mesh");
 }

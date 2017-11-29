@@ -4,10 +4,10 @@
 #ifndef CCANVAS_H
 #define CCANVAS_H
 
-#include <iostream>
-#include <QtOpenGL>
 #include <QGLWidget>
 #include <QTimer>
+#include <QtOpenGL>
+#include <iostream>
 
 #include "Base.h"
 #include "texture.hpp"
@@ -20,27 +20,25 @@ using namespace std;
 /************************************************************************/
 /* Canvas to draw                                                       */
 /************************************************************************/
-class CCanvas : public QGLWidget
-{
-  Q_OBJECT
+class CCanvas : public QGLWidget {
+    Q_OBJECT
 
-public:
+  public:
     explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
-        textureTrain("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.jpg"),
-        modelTrain("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.obj"),
-        modelTrain2("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.ply")
-    {
+                                            textureTrain("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.jpg"),
+                                            modelTrain("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.obj"),
+                                            modelTrain2("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.ply") {
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
     }
 
-protected:
+  protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
 
-private:
+  private:
     void lookAt(const GLdouble eyex,
                 const GLdouble eyey,
                 const GLdouble eyez,
@@ -56,10 +54,9 @@ private:
                        const GLdouble zNear,
                        const GLdouble zFar);
 
-
     enum View {
-        Perspective = 0,    // View the scene from a perspective (from above, from a side, or whatever)
-        Cockpit             // View the scene from the train cockpit (if you want, or whatever other view)
+        Perspective = 0, // View the scene from a perspective (from above, from a side, or whatever)
+        Cockpit          // View the scene from the train cockpit (if you want, or whatever other view)
     };
 
     void setView(View _view);
@@ -72,4 +69,4 @@ private:
     PlyModel modelTrain2;
 };
 
-#endif 
+#endif

@@ -27,19 +27,19 @@ void ObjModel::init() {
 void ObjModel::draw() {
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexPointer(
-                3,                  // size
-                GL_FLOAT,           // type
-                0,                  // stride
-                (void*)0            // array buffer offset
-            );
+        3,        // size
+        GL_FLOAT, // type
+        0,        // stride
+        (void *)0 // array buffer offset
+    );
     glEnableClientState(GL_VERTEX_ARRAY);
 
     glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
     glTexCoordPointer(
-        2,                                // size
-        GL_FLOAT,                         // type
-        0,                                // stride
-        (void*)0                          // array buffer offset
+        2,        // size
+        GL_FLOAT, // type
+        0,        // stride
+        (void *)0 // array buffer offset
     );
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 

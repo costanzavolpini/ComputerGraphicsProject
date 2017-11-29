@@ -10,18 +10,18 @@ Comment: This file contains all basic definitions.
 
 // STL includes.
 #include <algorithm>
-#include <iostream>
 #include <cassert>
-#include <vector>
 #include <cfloat>
 #include <cmath>
+#include <iostream>
 #include <queue>
 #include <set>
+#include <vector>
 
 // Local includes.
 #include "Point3.h"
 
-#define round(x) floor(x+0.5)
+#define round(x) floor(x + 0.5)
 
 //--------------------------------------------------------------------------
 /** draw modes */

@@ -1,18 +1,17 @@
 #ifndef PLYMODEL_H
 #define PLYMODEL_H
 
-#include <QtOpenGL>
-#include "Point3.h"
 #include "Point2.h"
+#include "Point3.h"
+#include <QtOpenGL>
 
-class PlyModel
-{
-public:
+class PlyModel {
+  public:
     PlyModel(const std::string &_path);
     void init();
     void draw();
 
-private:
+  private:
     std::vector<GLfloat> fvertices;
     std::vector<GLfloat> fuvs;
     std::vector<GLfloat> fnormals;
