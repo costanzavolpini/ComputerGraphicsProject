@@ -45,12 +45,11 @@
 **
 ****************************************************************************/
 
-#include <QApplication>
 #include "GLRender.h"
+#include <QApplication>
 
 //! [0]
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     GLRender viewer(0, Qt::Window);
 

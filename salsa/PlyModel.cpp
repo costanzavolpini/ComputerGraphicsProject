@@ -1,7 +1,7 @@
 #include "PlyModel.h"
 #include "Base.h"
-#include <math.h>
 #include <fstream>
+#include <math.h>
 
 #include "tinyply.h"
 
@@ -45,16 +45,16 @@ PlyModel::PlyModel(const std::string &_path) {
     // The count returns the number of instances of the property group. The vectors
     // above will be resized into a multiple of the property group size as
     // they are "flattened"... i.e. verts = {x, y, z, x, y, z, ...}
-    vertexCount = file.request_properties_from_element("vertex", { "x", "y", "z" }, verts);
-    normalCount = file.request_properties_from_element("vertex", { "nx", "ny", "nz" }, norms);
-    colorCount = file.request_properties_from_element("vertex", { "red", "green", "blue", "alpha" }, colors);
+    vertexCount = file.request_properties_from_element("vertex", {"x", "y", "z"}, verts);
+    normalCount = file.request_properties_from_element("vertex", {"nx", "ny", "nz"}, norms);
+    colorCount = file.request_properties_from_element("vertex", {"red", "green", "blue", "alpha"}, colors);
 
     // For properties that are list types, it is possibly to specify the expected count (ideal if a
     // consumer of this library knows the layout of their format a-priori). Otherwise, tinyply
     // defers allocation of memory until the first instance of the property has been found
     // as implemented in file.read(ss)
-    faceCount = file.request_properties_from_element("face", { "vertex_indices" }, faces, 3);
-    faceTexcoordCount = file.request_properties_from_element("face", { "texcoord" }, uvCoords, 6);
+    faceCount = file.request_properties_from_element("face", {"vertex_indices"}, faces, 3);
+    faceTexcoordCount = file.request_properties_from_element("face", {"texcoord"}, uvCoords, 6);
 
     // Now populate the vectors...
     file.read(ss);
@@ -66,7 +66,7 @@ PlyModel::PlyModel(const std::string &_path) {
     //std::cout << "TexCoords: " << faceTexcoordCount << ", " << uvCoords.size() << std::endl;
 
     // Copy red values into opengl arrays
-    for(auto i = faces.begin(); i != faces.end(); i++) {
+    for (auto i = faces.begin(); i != faces.end(); i++) {
         fvertices.push_back(verts.at(*i * 3));
         fvertices.push_back(verts.at(*i * 3 + 1));
         fvertices.push_back(verts.at(*i * 3 + 2));
@@ -78,7 +78,7 @@ PlyModel::PlyModel(const std::string &_path) {
         fcolors.push_back((GLfloat)(colors.at(*i * 4 + 2)) / 255.0f);
         fcolors.push_back((GLfloat)(colors.at(*i * 4 + 3)) / 255.0f);
     }
-    for(auto i = uvCoords.begin(); i != uvCoords.end(); i++) {
+    for (auto i = uvCoords.begin(); i != uvCoords.end(); i++) {
         fuvs.push_back(*i);
     }
 }
@@ -105,27 +105,27 @@ void PlyModel::draw() {
     glEnableClientState(GL_VERTEX_ARRAY);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexPointer(
-                3,                  // size
-                GL_FLOAT,           // type
-                0,                  // stride
-                (void*)0            // array buffer offset
-            );
+        3,        // size
+        GL_FLOAT, // type
+        0,        // stride
+        (void *)0 // array buffer offset
+    );
 
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
     glTexCoordPointer(
-        2,                                // size
-        GL_FLOAT,                         // type
-        0,                                // stride
-        (void*)0                          // array buffer offset
+        2,        // size
+        GL_FLOAT, // type
+        0,        // stride
+        (void *)0 // array buffer offset
     );
 
     glEnableClientState(GL_NORMAL_ARRAY);
     glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
     glNormalPointer(
-        GL_FLOAT,                         // type
-        0,                                // stride
-        (void*)0                          // array buffer offset
+        GL_FLOAT, // type
+        0,        // stride
+        (void *)0 // array buffer offset
     );
 
     /*

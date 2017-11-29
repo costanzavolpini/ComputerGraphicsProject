@@ -9,15 +9,13 @@
 #include <QtOpenGL>
 
 // The texture class.
-class Texture
-{
-public:
+class Texture {
+  public:
     // Constructor.
-    Texture(const std::string &path) : loaded(false), path(path) { }
+    Texture(const std::string &path) : loaded(false), path(path) {}
 
     // Bind the program.
-    inline void bind()
-    {
+    inline void bind() {
         assert(loaded);
 
         glActiveTexture(GL_TEXTURE0);
@@ -26,20 +24,18 @@ public:
     }
 
     // Unbind the program.
-    inline void unbind()
-    {
+    inline void unbind() {
         glDisable(GL_TEXTURE_2D);
     }
 
     // Set 2D texture.
-    void setTexture()
-    {
+    void setTexture() {
         QImageReader reader(path.c_str());
         QImage img;
 
         const bool read = reader.read(&img);
 
-        if(!read) {
+        if (!read) {
             std::cout << "Failed to read: " << path.c_str() << " with message:" << reader.errorString().toStdString().c_str() << "; " << std::endl;
             assert(read);
             return;
@@ -65,7 +61,7 @@ public:
         loaded = true;
     }
 
-private:
+  private:
     // Global variables.
     bool loaded;
     const std::string path;

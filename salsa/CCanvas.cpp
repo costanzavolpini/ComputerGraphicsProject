@@ -6,12 +6,11 @@ using namespace std;
 
 //-----------------------------------------------------------------------------
 
-void CCanvas::initializeGL()
-{
-    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);			   // black background
-    glClearDepth(1.0f);								   // depth buffer setup
-    glEnable(GL_DEPTH_TEST);						   // enables depth testing
-    glDepthFunc(GL_LEQUAL);							   // the type of depth testing to do
+void CCanvas::initializeGL() {
+    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);              // black background
+    glClearDepth(1.0f);                                // depth buffer setup
+    glEnable(GL_DEPTH_TEST);                           // enables depth testing
+    glDepthFunc(GL_LEQUAL);                            // the type of depth testing to do
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // really nice perspective calculations
     glShadeModel(GL_SMOOTH);
 
@@ -31,13 +30,13 @@ void CCanvas::initializeGL()
     GLfloat lightpos[] = {0.0, 0.0, 1.0, 0.0};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-    GLfloat lightAmb[]  = {0.3, 0.3, 0.3};
+    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
     GLfloat lightDiff[] = {0.4, 0.4, 0.4};
     GLfloat lightSpec[] = {0.5, 0.5, 0.5};
 
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
-    glLightfv(GL_LIGHT0, GL_AMBIENT,  lightAmb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,  lightDiff);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
 
     /*
      * Before you can use the texture you need to initialize it by calling the setTexture() method.
@@ -50,8 +49,7 @@ void CCanvas::initializeGL()
 
 //-----------------------------------------------------------------------------
 
-void CCanvas::glPerspective(const GLdouble fovy, const GLdouble aspect, const GLdouble zNear, const GLdouble zFar)
-{
+void CCanvas::glPerspective(const GLdouble fovy, const GLdouble aspect, const GLdouble zNear, const GLdouble zFar) {
     const GLdouble d = 1.0 / tan(fovy / 360.0 * PI);
     const GLdouble delta = zNear - zFar;
 
@@ -67,8 +65,8 @@ void CCanvas::glPerspective(const GLdouble fovy, const GLdouble aspect, const GL
     mat[6] = 0.0;
     mat[7] = 0.0;
 
-    mat[8]  = 0.0;
-    mat[9]  = 0.0;
+    mat[8] = 0.0;
+    mat[9] = 0.0;
     mat[10] = (zNear + zFar) / delta;
     mat[11] = -1.0;
 
@@ -90,8 +88,7 @@ void CCanvas::lookAt(const GLdouble eyex,
                      const GLdouble centerz,
                      const GLdouble upx,
                      const GLdouble upy,
-                     const GLdouble upz)
-{
+                     const GLdouble upz) {
     GLdouble *mat = new GLdouble[16];
 
     // TODO: add computation for the lookat here!
@@ -124,8 +121,8 @@ void CCanvas::lookAt(const GLdouble eyex,
     mat[6] = Y.z();
     mat[7] = -Y * eye;
 
-    mat[8]  = Z.x();
-    mat[9]  = Z.y();
+    mat[8] = Z.x();
+    mat[9] = Z.y();
     mat[10] = Z.z();
     mat[11] = -Z * eye;
 
@@ -139,8 +136,7 @@ void CCanvas::lookAt(const GLdouble eyex,
     delete[] mat;
 }
 
-void CCanvas::resizeGL(int width, int height)
-{
+void CCanvas::resizeGL(int width, int height) {
     // set up the window-to-viewport transformation
     glViewport(0, 0, width, height);
 
@@ -149,8 +145,10 @@ void CCanvas::resizeGL(int width, int height)
 
     // aspect ratio
     double gamma;
-    if(height > 0) gamma = width / (double)height;
-    else gamma = width;
+    if (height > 0)
+        gamma = width / (double)height;
+    else
+        gamma = width;
 
     // front and back clipping plane at
     double n = -0.01;
@@ -174,19 +172,18 @@ void CCanvas::resizeGL(int width, int height)
 //-----------------------------------------------------------------------------
 
 void CCanvas::setView(View _view) {
-    switch(_view) {
-    case Perspective:
-        glTranslatef(1.0, -2.5, -10.0);
-        glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
-        break;
-    case Cockpit:
-        // Maybe you want to have an option to view the scene from the train cockpit, up to you
-        break;
+    switch (_view) {
+        case Perspective:
+            glTranslatef(1.0, -2.5, -10.0);
+            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+            break;
+        case Cockpit:
+            // Maybe you want to have an option to view the scene from the train cockpit, up to you
+            break;
     }
 }
 
-void CCanvas::paintGL()
-{
+void CCanvas::paintGL() {
     // clear screen and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
