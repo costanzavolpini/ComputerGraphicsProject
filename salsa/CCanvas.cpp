@@ -42,9 +42,11 @@ void CCanvas::initializeGL() {
      * Before you can use the texture you need to initialize it by calling the setTexture() method.
      * Before you can use OBJ/PLY model, you need to initialize it by calling init() method.
      */
-    textureTrain.setTexture();
+//    textureTrain.setTexture();
     modelTrain.init();
-    modelTrain2.init();
+
+    // do not use PLY
+//    modelTrain2.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -191,7 +193,7 @@ void CCanvas::paintGL() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // Setup the current view
     setView(View::Perspective);
@@ -201,32 +203,32 @@ void CCanvas::paintGL() {
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
     /**** Axes in the global coordinate system ****/
-    /*
+
     glDisable(GL_LIGHTING);
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_LINES);
-        glVertex3f(-6.0f, 0.0f, 0.0f);
-        glVertex3f(6.0f, 0.0f, 0.0f);
+        glVertex3f(-3.0f, 0.0f, 0.0f);
+        glVertex3f(60.0f, 0.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_LINES);
-        glVertex3f(0.0f, -6.0f, 0.0f);
-        glVertex3f(0.0f, 6.0f, 0.0f);
+        glVertex3f(0.0f, -3.0f, 0.0f);
+        glVertex3f(0.0f, 60.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
-        glVertex3f(0.0f, 0.0f, -6.0f);
-        glVertex3f(0.0f, 0.0f, 6.0f);
+        glVertex3f(0.0f, 0.0f, -3.0f);
+        glVertex3f(0.0f, 0.0f, 60.0f);
     glEnd();
     glEnable(GL_LIGHTING);
-    */
+
     /**** Setup and draw your objects ****/
 
     // You can freely enable/disable some of the lights in the scene as you wish
     //glEnable(GL_LIGHT0);
     //glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
-    /*
+
     glColor3f(0.5f, 0.5f, 0.5f);
     GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
     GLfloat diff[] = {0.7f, 0.7f, 0.7f};
@@ -236,10 +238,10 @@ void CCanvas::paintGL() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
-    */
+
 
     // Drawing the object with texture
-    textureTrain.bind();
+//    textureTrain.bind();
     // You can stack new transformation matrix if you don't want
     // the previous transformations to apply on this object
     glPushMatrix();

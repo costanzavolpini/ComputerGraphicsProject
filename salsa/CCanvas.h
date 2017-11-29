@@ -27,9 +27,8 @@ class CCanvas : public QGLWidget {
 
   public:
     explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
-                                            textureTrain((string)BASE_PATH + (string)"train.jpg"),
-                                            modelTrain((string)BASE_PATH + (string)"train.obj"),
-                                            modelTrain2((string)BASE_PATH + (string)"train.ply") {
+                                            textureTrain((string)BASE_PATH + (string)"train/train.jpg"),
+                                            modelTrain((string)BASE_PATH + (string)"bird/eagle.obj") {
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
@@ -67,8 +66,10 @@ class CCanvas : public QGLWidget {
     Texture textureTrain;
     // Model loaded from .obj format
     ObjModel modelTrain;
+
+    // NO
     // Model loaded from .ply format
-    PlyModel modelTrain2;
+//    PlyModel modelTrain2;
 };
 
 #endif
