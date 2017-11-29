@@ -22,7 +22,8 @@ HEADERS += ./Base.h \
            ./ObjModel.h \
            ./PlyModel.h \
            ./objloader.hpp \
-           ./tinyply.h
+           ./tinyply.h \
+           ./LocalPath.h
 
 # Source files
 SOURCES += ./CCanvas.cpp \
