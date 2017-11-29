@@ -33,3 +33,5 @@
 *build*/
 *.pro.user
 salsa/LocalPath\.h
+
+\.DS_Store
