@@ -1,0 +1,7 @@
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+UseTab: false
+IndentWidth: 4
+BreakBeforeBraces: LLVM
+AllowShortIfStatementsOnASingleLine: true
+IndentCaseLabels: true
+ColumnLimit: 0
