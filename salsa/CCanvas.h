@@ -27,9 +27,9 @@ class CCanvas : public QGLWidget {
 
   public:
     explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
-                                            textureTrain(BASE_PATH + "train.jpg"),
-                                            modelTrain(BASE_PATH + "train.obj"),
-                                            modelTrain2(BASE_PATH + "train.ply") {
+                                            textureTrain((string)BASE_PATH + (string)"train.jpg"),
+                                            modelTrain((string)BASE_PATH + (string)"train.obj"),
+                                            modelTrain2((string)BASE_PATH + (string)"train.ply") {
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
