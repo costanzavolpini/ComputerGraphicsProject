@@ -15,6 +15,8 @@
 #include "ObjModel.h"
 #include "PlyModel.h"
 
+#include "LocalPath.h"
+
 using namespace std;
 
 /************************************************************************/
@@ -25,9 +27,9 @@ class CCanvas : public QGLWidget {
 
   public:
     explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
-                                            textureTrain("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.jpg"),
-                                            modelTrain("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.obj"),
-                                            modelTrain2("/Users/gabrielerovi/Desktop/computergraphics/project_base_code/train.ply") {
+                                            textureTrain(TRAIN_JPG),
+                                            modelTrain(TRAIN_OBJ),
+                                            modelTrain2(TRAIN_PLY) {
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
