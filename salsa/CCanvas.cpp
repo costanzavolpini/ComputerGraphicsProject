@@ -225,7 +225,7 @@ void CCanvas::paintGL() {
     /**** Setup and draw your objects ****/
 
     // You can freely enable/disable some of the lights in the scene as you wish
-    //glEnable(GL_LIGHT0);
+//    glEnable(GL_LIGHT0);
     //glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
 
@@ -253,7 +253,9 @@ void CCanvas::paintGL() {
 
     // rotate Eagle (debug)
     tau += 1.0f;
+    GLfloat scale = 10.0f;
     glRotatef(tau, 0.0f, 1.0f, 0.0f);
+    glScalef(scale, scale, scale);
 
     // Look at the ObjModel class to see how the drawing is done
     eagleModel.draw();
