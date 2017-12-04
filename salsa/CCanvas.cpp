@@ -7,7 +7,7 @@ using namespace std;
 //-----------------------------------------------------------------------------
 
 void CCanvas::initializeGL() {
-    glClearColor(0.7f, 0.7f, 0.7f, 0.5f);              // black background
+    glClearColor(0.8117647059f, 0.8470588235f, 0.862745098f, 0.5f);              // black background
     glClearDepth(1.0f);                                // depth buffer setup
     glEnable(GL_DEPTH_TEST);                           // enables depth testing
     glDepthFunc(GL_LEQUAL);                            // the type of depth testing to do
@@ -44,6 +44,9 @@ void CCanvas::initializeGL() {
      */
     bird.init();
     scene.init();
+
+    // Example for debugging
+//    example.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -199,7 +202,7 @@ void CCanvas::paintGL() {
     GLfloat lightpos[] = {0.0f, 0.0f, 10.0f, 0.0f};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-    /**** Axes in the global coordinate system ****/
+    /*** Draw Axes in the global coordinate system ***/
 
     glDisable(GL_LIGHTING);
     glColor3f(1.0f, 0.0f, 0.0f);
@@ -240,7 +243,7 @@ void CCanvas::paintGL() {
     /*
      * Bind texture and push new matrix before drawing
      */
-//    bird.getTexture().bind();
+    bird.getTexture().bind();
     glPushMatrix();
 
     /*
@@ -271,7 +274,7 @@ void CCanvas::paintGL() {
      * object with a new transformation and now you go back to the previous one
      */
     glPopMatrix();
-//    bird.getTexture().unbind();
+    bird.getTexture().unbind();
 
 
 

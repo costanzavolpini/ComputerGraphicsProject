@@ -53,7 +53,8 @@ bool loadOBJ(
         } else if (strcmp(lineHeader, "vt") == 0) {
             float uvx, uvy;
             fscanf(file, "%f %f\n", &uvx, &uvy);
-            uvy = -uvy; // Invert V coordinate since we will only use DDS texture, which are inverted. Remove if you want to use TGA or BMP loaders.
+            // WHY? Why is this line here?
+//            uvy = -uvy; // Invert V coordinate since we will only use DDS texture, which are inverted. Remove if you want to use TGA or BMP loaders.
             Point2d uv(uvx, uvy);
             temp_uvs.push_back(uv);
         } else if (strcmp(lineHeader, "vn") == 0) {
@@ -67,6 +68,7 @@ bool loadOBJ(
             int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
             if (matches != 9) {
                 printf("File can't be read by our simple parser :-( Try exporting with other options\n");
+                printf("OMG really? An old style emoticon? How sad...");
                 fclose(file);
                 return false;
             }
