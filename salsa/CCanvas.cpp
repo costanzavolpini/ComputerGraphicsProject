@@ -253,7 +253,7 @@ void CCanvas::paintGL() {
      * rotate Bird (testing)
      */
     tau += 1.0f;
-    GLfloat scale = 0.01f;
+    GLfloat scale = 1.0f;
     glRotatef(tau, 0.0f, 1.0f, 0.0f);
     glScalef(scale, scale, scale);
 
@@ -262,12 +262,6 @@ void CCanvas::paintGL() {
      * Draw Bird
      */
     bird.draw();
-
-    /*
-     * The models you load can have different scales. If you are drawing a proper model but nothing
-     * is shown, check the scale of the model, your camera could be for example inside of it.
-     */
-    //glScalef(0.02f, 0.02f, 0.02f);
 
 
     /*
