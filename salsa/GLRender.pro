@@ -37,3 +37,8 @@ SOURCES += ./CCanvas.cpp \
 
 # Forms
 FORMS += ./GLRender.ui
+
+# Install
+install_media.path = ../build/GLRender.app/Contents/MacOS/
+install_media.files += ../models/
+INSTALLS += install_media

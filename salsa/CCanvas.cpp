@@ -200,32 +200,32 @@ void CCanvas::paintGL() {
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
     /**** Axes in the global coordinate system ****/
-    /*
+
     glDisable(GL_LIGHTING);
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_LINES);
-        glVertex3f(-6.0f, 0.0f, 0.0f);
-        glVertex3f(6.0f, 0.0f, 0.0f);
+        glVertex3f(-3.0f, 0.0f, 0.0f);
+        glVertex3f(60.0f, 0.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_LINES);
-        glVertex3f(0.0f, -6.0f, 0.0f);
-        glVertex3f(0.0f, 6.0f, 0.0f);
+        glVertex3f(0.0f, -3.0f, 0.0f);
+        glVertex3f(0.0f, 60.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
-        glVertex3f(0.0f, 0.0f, -6.0f);
-        glVertex3f(0.0f, 0.0f, 6.0f);
+        glVertex3f(0.0f, 0.0f, -3.0f);
+        glVertex3f(0.0f, 0.0f, 60.0f);
     glEnd();
     glEnable(GL_LIGHTING);
-    */
+
     /**** Setup and draw your objects ****/
 
     // You can freely enable/disable some of the lights in the scene as you wish
-    //glEnable(GL_LIGHT0);
+//    glEnable(GL_LIGHT0);
     //glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
-    /*
+
     glColor3f(0.5f, 0.5f, 0.5f);
     GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
     GLfloat diff[] = {0.7f, 0.7f, 0.7f};
@@ -235,24 +235,46 @@ void CCanvas::paintGL() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
-    */
 
-    //
+
+    /*
+     * Bind texture and push new matrix before drawing
+     */
     bird.getTexture().bind();
     glPushMatrix();
+
     /*
      * Obtaining the values of the current modelview matrix
      *  GLfloat matrix[16];
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
+
+    /*
+     * rotate Bird (testing)
+     */
+    tau += 1.0f;
+    GLfloat scale = 10.0f;
+    glRotatef(tau, 0.0f, 1.0f, 0.0f);
+    glScalef(scale, scale, scale);
+
+
+    /*
+     * Draw Bird
+     */
     bird.draw();
+
     /*
      * The models you load can have different scales. If you are drawing a proper model but nothing
      * is shown, check the scale of the model, your camera could be for example inside of it.
      */
     //glScalef(0.02f, 0.02f, 0.02f);
-    // Remove the last transformation matrix from the stack - you have drawn your last
-    // object with a new transformation and now you go back to the previous one
+
+
+    /*
+     * Unbind texture and pop matrix
+     * Remove the last transformation matrix from the stack - you have drawn your last
+     * object with a new transformation and now you go back to the previous one
+     */
     glPopMatrix();
     bird.getTexture().unbind();
 }

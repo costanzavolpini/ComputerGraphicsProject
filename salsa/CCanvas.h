@@ -28,6 +28,7 @@ class CCanvas : public QGLWidget {
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
+        tau = 0.0f;
     }
 
   protected:
@@ -70,6 +71,11 @@ class CCanvas : public QGLWidget {
 
     // Scene object
     Scene scene;
+
+    /*
+     * For rotation (testing)
+     */
+    GLfloat tau;
 };
 
 #endif
