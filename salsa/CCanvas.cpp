@@ -222,7 +222,7 @@ void CCanvas::paintGL() {
     /**** Setup and draw your objects ****/
 
     // You can freely enable/disable some of the lights in the scene as you wish
-//    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT0);
     //glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
 
@@ -240,7 +240,7 @@ void CCanvas::paintGL() {
     /*
      * Bind texture and push new matrix before drawing
      */
-    bird.getTexture().bind();
+//    bird.getTexture().bind();
     glPushMatrix();
 
     /*
@@ -253,7 +253,7 @@ void CCanvas::paintGL() {
      * rotate Bird (testing)
      */
     tau += 1.0f;
-    GLfloat scale = 10.0f;
+    GLfloat scale = 0.01f;
     glRotatef(tau, 0.0f, 1.0f, 0.0f);
     glScalef(scale, scale, scale);
 
@@ -276,5 +276,5 @@ void CCanvas::paintGL() {
      * object with a new transformation and now you go back to the previous one
      */
     glPopMatrix();
-    bird.getTexture().unbind();
+//    bird.getTexture().unbind();
 }

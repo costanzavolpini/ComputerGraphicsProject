@@ -14,10 +14,10 @@ public:
     Bird() : body("./models/bird/eagle/parts/body.obj"),
              head("./models/bird/eagle/parts/head.obj"),
              tail("./models/bird/eagle/parts/tail.obj"),
-             left_wing_far("./models/bird/eagle/parts/left_wings_outer.obj"),
-             left_wing_close("./models/bird/eagle/parts/left_wings_inner.obj"),
-             right_wing_far("./models/bird/eagle/parts/right_wings_outer.obj"),
-             right_wing_close("./models/bird/eagle/parts/right_wings_inner.obj"),
+             left_wing_far("./models/bird/eagle/parts/left-wings-outer.obj"),
+             left_wing_close("./models/bird/eagle/parts/left-wings-inner.obj"),
+             right_wing_far("./models/bird/eagle/parts/right-wings-outer.obj"),
+             right_wing_close("./models/bird/eagle/parts/right-wings-inner.obj"),
              texture("./models/bird/eagle/texture/full.png") {
         std::cout << "Loaded Bird parts" << std::endl;
     }

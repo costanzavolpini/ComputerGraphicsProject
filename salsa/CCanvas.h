@@ -24,7 +24,10 @@ class CCanvas : public QGLWidget {
     Q_OBJECT
 
   public:
-    explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent) {
+    explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
+                                            bird(),
+                                            scene() {
+
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
