@@ -253,8 +253,9 @@ void CCanvas::paintGL() {
      * rotate Bird (testing)
      */
     tau += 1.0f;
-    GLfloat scale = 0.5f;
-    glRotatef(tau, 0.0f, 1.0f, 0.0f);
+    GLfloat scale = 0.2f;
+    glRotatef(0.5*tau, 0.0f, -1.0f, 0.0f);
+    glTranslatef(4.0f, 3.0f, 0.0f);
     glScalef(scale, scale, scale);
 
 
@@ -292,8 +293,9 @@ void CCanvas::paintGL() {
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
 
-    GLfloat scale2 = 0.2f;
-//    glRotatef(tau, 0.0f, 1.0f, 0.0f);
+    GLfloat scale2 = 0.01f;
+    glTranslatef(1.0f, 1.0f, 0.0f);
+    glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
     glScalef(scale2, scale2, scale2);
 
 

@@ -14,10 +14,11 @@ class ObjModel {
   private:
     std::vector<GLfloat> fvertices;
     std::vector<GLfloat> fuvs;
-    std::vector<GLfloat> fnormals; // Won't be used at the moment
+    std::vector<GLfloat> fnormals;
 
     GLuint vertexBuffer;
     GLuint uvBuffer;
+    GLuint normalsBuffer;
 };
 
 #endif // SPHERE_H
