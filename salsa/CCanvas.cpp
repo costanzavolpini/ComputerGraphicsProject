@@ -7,7 +7,7 @@ using namespace std;
 //-----------------------------------------------------------------------------
 
 void CCanvas::initializeGL() {
-    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);              // black background
+    glClearColor(0.7f, 0.7f, 0.7f, 0.5f);              // black background
     glClearDepth(1.0f);                                // depth buffer setup
     glEnable(GL_DEPTH_TEST);                           // enables depth testing
     glDepthFunc(GL_LEQUAL);                            // the type of depth testing to do
@@ -43,7 +43,7 @@ void CCanvas::initializeGL() {
      * Before you can use OBJ/PLY model, you need to initialize it by calling init() method.
      */
     bird.init();
-//    scene.init();
+    scene.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -223,7 +223,7 @@ void CCanvas::paintGL() {
 
     // You can freely enable/disable some of the lights in the scene as you wish
     glEnable(GL_LIGHT0);
-    //glDisable(GL_LIGHT1);
+//    glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
 
     glColor3f(0.5f, 0.5f, 0.5f);
@@ -240,7 +240,7 @@ void CCanvas::paintGL() {
     /*
      * Bind texture and push new matrix before drawing
      */
-//    bird.getTexture().bind();
+    bird.getTexture().bind();
     glPushMatrix();
 
     /*
@@ -253,7 +253,7 @@ void CCanvas::paintGL() {
      * rotate Bird (testing)
      */
     tau += 1.0f;
-    GLfloat scale = 1.0f;
+    GLfloat scale = 0.5f;
     glRotatef(tau, 0.0f, 1.0f, 0.0f);
     glScalef(scale, scale, scale);
 
@@ -270,5 +270,44 @@ void CCanvas::paintGL() {
      * object with a new transformation and now you go back to the previous one
      */
     glPopMatrix();
-//    bird.getTexture().unbind();
+    bird.getTexture().unbind();
+
+
+
+
+
+
+
+
+
+    /*
+     * Bind texture and push new matrix before drawing
+     */
+    scene.getTexture().bind();
+    glPushMatrix();
+
+    /*
+     * Obtaining the values of the current modelview matrix
+     *  GLfloat matrix[16];
+     *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
+    */
+
+    GLfloat scale2 = 0.2f;
+//    glRotatef(tau, 0.0f, 1.0f, 0.0f);
+    glScalef(scale2, scale2, scale2);
+
+
+    /*
+     * Draw Bird
+     */
+    scene.draw();
+
+
+    /*
+     * Unbind texture and pop matrix
+     * Remove the last transformation matrix from the stack - you have drawn your last
+     * object with a new transformation and now you go back to the previous one
+     */
+    glPopMatrix();
+    scene.getTexture().unbind();
 }

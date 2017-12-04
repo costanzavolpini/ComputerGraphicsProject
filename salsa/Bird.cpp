@@ -11,6 +11,7 @@ void Bird::init() {
     left_wing_close.init();
     right_wing_far.init();
     right_wing_close.init();
+    texture.setTexture();
 }
 
 /*

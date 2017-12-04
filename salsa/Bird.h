@@ -4,7 +4,6 @@
 #include "ObjModel.h"
 #include "texture.hpp"
 
-
 class Bird {
 
 public:
