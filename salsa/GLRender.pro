@@ -22,8 +22,7 @@ HEADERS += ./Base.h \
            ./ObjModel.h \
            ./PlyModel.h \
            ./objloader.hpp \
-           ./tinyply.h \
-           ./LocalPath.h
+           ./tinyply.h
 
 # Source files
 SOURCES += ./CCanvas.cpp \
@@ -37,3 +36,8 @@ SOURCES += ./CCanvas.cpp \
 
 # Forms
 FORMS += ./GLRender.ui
+
+# Install
+install_media.path = ../build/GLRender.app/Contents/MacOS/
+install_media.files += ../models/
+INSTALLS += install_media
