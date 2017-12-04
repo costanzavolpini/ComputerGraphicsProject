@@ -240,7 +240,7 @@ void CCanvas::paintGL() {
     /*
      * Bind texture and push new matrix before drawing
      */
-    bird.getTexture().bind();
+//    bird.getTexture().bind();
     glPushMatrix();
 
     /*
@@ -255,7 +255,7 @@ void CCanvas::paintGL() {
     tau += 1.0f;
     GLfloat scale = 0.2f;
     glRotatef(0.5*tau, 0.0f, -1.0f, 0.0f);
-    glTranslatef(4.0f, 3.0f, 0.0f);
+    glTranslatef(4.0f, 2.0f, 0.0f);
     glScalef(scale, scale, scale);
 
 
@@ -271,7 +271,7 @@ void CCanvas::paintGL() {
      * object with a new transformation and now you go back to the previous one
      */
     glPopMatrix();
-    bird.getTexture().unbind();
+//    bird.getTexture().unbind();
 
 
 
@@ -295,7 +295,7 @@ void CCanvas::paintGL() {
 
     GLfloat scale2 = 0.01f;
     glTranslatef(1.0f, 1.0f, 0.0f);
-    glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
+    glRotatef(-65.0f, 0.0f, 1.0f, 0.0f);
     glScalef(scale2, scale2, scale2);
 
 
