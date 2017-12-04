@@ -296,9 +296,9 @@ void CCanvas::paintGL() {
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
 
-    GLfloat scale2 = 0.01f;
-    glTranslatef(1.0f, 1.0f, 0.0f);
-    glRotatef(-65.0f, 0.0f, 1.0f, 0.0f);
+    GLfloat scale2 = 1.0f;
+    glRotatef(0.0f, 0.0f, 0.0f, 0.0f);
+    glTranslatef(-5.0f, -9.0f, -30.0f);
     glScalef(scale2, scale2, scale2);
 
 

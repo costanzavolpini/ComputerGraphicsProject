@@ -9,3 +9,7 @@ I believe I can fly, I believe I can touch the sky
 5. click right
 6. CTRL + L
 7. P
+
+
+### Download model:
+https://filedn.com/lXE33vJSKAGY4tsHPBP3yBb/mountains.obj

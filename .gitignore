@@ -35,3 +35,5 @@
 salsa/LocalPath\.h
 
 \.DS_Store
+
+models/mountains/mountains\.obj
