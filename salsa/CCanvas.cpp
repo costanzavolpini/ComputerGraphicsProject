@@ -42,9 +42,8 @@ void CCanvas::initializeGL() {
      * Before you can use the texture you need to initialize it by calling the setTexture() method.
      * Before you can use OBJ/PLY model, you need to initialize it by calling init() method.
      */
-    textureTrain.setTexture();
-    modelTrain.init();
-    modelTrain2.init();
+    bird.init();
+//    scene.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -238,28 +237,22 @@ void CCanvas::paintGL() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
     */
 
-    // Drawing the object with texture
-    textureTrain.bind();
-    // You can stack new transformation matrix if you don't want
-    // the previous transformations to apply on this object
+    //
+    bird.getTexture().bind();
     glPushMatrix();
     /*
      * Obtaining the values of the current modelview matrix
      *  GLfloat matrix[16];
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
-
-    // Look at the ObjModel class to see how the drawing is done
-    modelTrain.draw();
-    // Look at the PlyModel class to see how the drawing is done
+    bird.draw();
     /*
      * The models you load can have different scales. If you are drawing a proper model but nothing
      * is shown, check the scale of the model, your camera could be for example inside of it.
      */
     //glScalef(0.02f, 0.02f, 0.02f);
-    //modelTrain2.draw();
     // Remove the last transformation matrix from the stack - you have drawn your last
     // object with a new transformation and now you go back to the previous one
     glPopMatrix();
-    textureTrain.unbind();
+    bird.getTexture().unbind();
 }

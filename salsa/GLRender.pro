@@ -20,10 +20,10 @@ HEADERS += ./Base.h \
            ./Sphere.h \
            ./texture.hpp \
            ./ObjModel.h \
-           ./PlyModel.h \
            ./objloader.hpp \
-           ./tinyply.h \
-           ./LocalPath.h
+           ./LocalPath.h \
+           ./Bird.h \
+           ./Scene.h
 
 # Source files
 SOURCES += ./CCanvas.cpp \
@@ -31,9 +31,9 @@ SOURCES += ./CCanvas.cpp \
            ./main.cpp \
            ./Sphere.cpp \
            ./ObjModel.cpp \
-           ./PlyModel.cpp \
            ./objloader.cpp \
-           ./tinyply.cpp
+           ./Bird.cpp \
+           ./Scene.cpp
 
 # Forms
 FORMS += ./GLRender.ui

@@ -12,12 +12,10 @@
 #include "Base.h"
 #include "texture.hpp"
 
-#include "ObjModel.h"
-#include "PlyModel.h"
-
-#include "LocalPath.h"
-
 using namespace std;
+//#include "ObjModel.h"
+#include "Bird.h"
+#include "Scene.h"
 
 /************************************************************************/
 /* Canvas to draw                                                       */
@@ -26,10 +24,7 @@ class CCanvas : public QGLWidget {
     Q_OBJECT
 
   public:
-    explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
-                                            textureTrain((string)BASE_PATH + (string)"train.jpg"),
-                                            modelTrain((string)BASE_PATH + (string)"train.obj"),
-                                            modelTrain2((string)BASE_PATH + (string)"train.ply") {
+    explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent) {
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
@@ -63,12 +58,18 @@ class CCanvas : public QGLWidget {
 
     void setView(View _view);
 
-    // Models and textures
-    Texture textureTrain;
-    // Model loaded from .obj format
-    ObjModel modelTrain;
-    // Model loaded from .ply format
-    PlyModel modelTrain2;
+
+    /*
+     * Scene objects. The Bird object contains all parts of the bird, and supports animation of
+     * the individual pieces; the Scene object contains the environment specification (the
+     * mountains, with trees and such, plus maybe a sun and clouds. Maybe.)
+     */
+
+    // Bird object
+    Bird bird;
+
+    // Scene object
+    Scene scene;
 };
 
 #endif

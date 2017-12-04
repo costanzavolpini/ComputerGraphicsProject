@@ -1,6 +1,9 @@
 #include "Scene.h"
 
-Scene::Scene()
-{
+void Scene::init() {
+
+}
+
+void Scene::draw() {
 
 }
