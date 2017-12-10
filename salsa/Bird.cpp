@@ -25,26 +25,28 @@ void Bird::draw() {
     glPopMatrix();
 
     glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 2.0f);
+//    glRotatef();
     head.draw();
     glPopMatrix();
 
-    glPushMatrix();
-    tail.draw();
-    glPopMatrix();
+//    glPushMatrix();
+//    tail.draw();
+//    glPopMatrix();
 
-    glPushMatrix();
-    left_wing_far.draw();
-    glPopMatrix();
+//    glPushMatrix();
+//    left_wing_far.draw();
+//    glPopMatrix();
 
-    glPushMatrix();
-    left_wing_close.draw();
-    glPopMatrix();
+//    glPushMatrix();
+//    left_wing_close.draw();
+//    glPopMatrix();
 
-    glPushMatrix();
-    right_wing_far.draw();
-    glPopMatrix();
+//    glPushMatrix();
+//    right_wing_far.draw();
+//    glPopMatrix();
 
-    glPushMatrix();
-    right_wing_close.draw();
-    glPopMatrix();
+//    glPushMatrix();
+//    right_wing_close.draw();
+//    glPopMatrix();
 }
