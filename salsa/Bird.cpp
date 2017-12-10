@@ -20,19 +20,22 @@ void Bird::init() {
  */
 void Bird::draw() {
 
+    glRotatef(180.0, 0.0f, 1.0f, 0.0f);
+
     glPushMatrix();
     body.draw();
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, 2.0f);
-//    glRotatef();
     head.draw();
     glPopMatrix();
 
-//    glPushMatrix();
-//    tail.draw();
-//    glPopMatrix();
+    glPushMatrix();
+//    glRotatef(3*sin(tau), 1.0f, 0.0f, 0.0f);
+    glTranslatef(0.0f, 0.0f, -1.4f);
+    tail.draw();
+    glPopMatrix();
 
 //    glPushMatrix();
 //    left_wing_far.draw();

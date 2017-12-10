@@ -30,7 +30,8 @@ void CCanvas::initializeGL() {
     GLfloat lightpos[] = {0.0, 0.0, 1.0, 0.0};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
+//    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
+    GLfloat lightAmb[] = {1.0, 1.0, 1.0}; //TODO remove
     GLfloat lightDiff[] = {0.4, 0.4, 0.4};
     GLfloat lightSpec[] = {0.5, 0.5, 0.5};
 
