@@ -56,8 +56,9 @@ class CCanvas : public QGLWidget {
                        const GLdouble zFar);
 
     enum View {
-        Perspective = 0, // View the scene from a perspective (from above, from a side, or whatever)
-        Cockpit          // View the scene from the train cockpit (if you want, or whatever other view)
+        Side = 0,        // View the scene from a side perspective
+        Eyes,            // View the scene from the Bird's eyes
+        Above            // View the scene from an above perspective
     };
 
     void setView(View _view);

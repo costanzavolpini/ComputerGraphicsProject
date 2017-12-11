@@ -32,7 +32,8 @@ void CCanvas::initializeGL() {
 
 //    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
     GLfloat lightAmb[] = {1.0, 1.0, 1.0}; //TODO remove
-    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
+//    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
+    GLfloat lightDiff[] = {1.0, 1.0, 1.0}; //TODO remove
     GLfloat lightSpec[] = {0.5, 0.5, 0.5};
 
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
@@ -44,6 +45,7 @@ void CCanvas::initializeGL() {
      * Before you can use OBJ/PLY model, you need to initialize it by calling init() method.
      */
     bird.init();
+    bird.setAnimate(true);
     scene.init();
 
     // Example for debugging
@@ -176,12 +178,16 @@ void CCanvas::resizeGL(int width, int height) {
 
 void CCanvas::setView(View _view) {
     switch (_view) {
-        case Perspective:
+        case Side:
             glTranslatef(1.0, -2.5, -10.0);
             glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
             break;
-        case Cockpit:
-            // Maybe you want to have an option to view the scene from the train cockpit, up to you
+        case Eyes:
+            // Maybe you want to have an option to view the scene from the bird's eyes, up to you
+            break;
+        case Above:
+            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+            glTranslatef(0.0, 2.5, -10.0);
             break;
     }
 }
@@ -197,10 +203,10 @@ void CCanvas::paintGL() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Setup the current view
-    setView(View::Perspective);
+    setView(View::Side);
 
     // You can always change the light position here if you want
-    GLfloat lightpos[] = {0.0f, 0.0f, 10.0f, 0.0f};
+    GLfloat lightpos[] = {-4.0f, 0.0f, 10.0f, 0.0f};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
     /*** Draw Axes in the global coordinate system ***/
@@ -230,15 +236,15 @@ void CCanvas::paintGL() {
 //    glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
 
-    glColor3f(0.5f, 0.5f, 0.5f);
-    GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
-    GLfloat diff[] = {0.7f, 0.7f, 0.7f};
-    GLfloat spec[] = {0.1f, 0.1f, 0.1f};
-    GLfloat shin = 0.0001;
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
+//    glColor3f(0.5f, 0.5f, 0.5f);
+//    GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
+//    GLfloat diff[] = {0.7f, 0.7f, 0.7f};
+//    GLfloat spec[] = {0.1f, 0.1f, 0.1f};
+//    GLfloat shin = 0.0001;
+//    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
+//    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
+//    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
+//    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
 
 
     /*
@@ -253,16 +259,14 @@ void CCanvas::paintGL() {
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
 
-    /*
-     * rotate Bird (testing)
-     */
-//    tau += 1.0f;
-//    GLfloat scale = 0.2f;
-//    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
-//    glTranslatef(3.0f, 3.0f, 0.0f);
-//    glScalef(scale, scale, scale);
 
+    /* Increment tau (for project main animation)
+     */
     tau += 0.01f;
+
+    /*
+     * Update flight path of the bird
+     */
     GLfloat scale = 0.2f;
 //    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
     glTranslatef(cos(tau) * 4.0f, sin(tau), sin(2*tau) * 4.0f);
@@ -270,8 +274,18 @@ void CCanvas::paintGL() {
 
 
     /*
+     * rotate Bird (testing) (don't put anything between here and bird.draw())
+     */
+//    GLfloat scale = 0.2f;
+    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+    glRotatef(10*sin(tau/100), 0.0f, 1.0f, 0.0f);
+//    glTranslatef(4.0f, 2.0f, 0.0f);
+//    glScalef(scale, scale, scale);
+
+    /*
      * Draw Bird
      */
+    bird.inc();
     bird.draw();
 
 
@@ -310,7 +324,7 @@ void CCanvas::paintGL() {
 
 
     /*
-     * Draw Bird
+     * Draw Scene
      */
     scene.draw();
 

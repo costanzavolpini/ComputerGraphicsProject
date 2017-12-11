@@ -25,9 +25,15 @@ public:
     void init();
     void draw();
 
+    void inc();
+
     /* Getters
      */
     Texture& getTexture() { return this->texture; }
+
+    /* Setters
+     */
+    void setAnimate(bool animate) { this->animate = animate; }
 
 private:
     // whether to animate the bird (moving wings, tail, ...) or not
@@ -47,6 +53,9 @@ private:
 
     // texture
     Texture texture;
+
+    // incremented number for animations
+    GLfloat psi;
 };
 
 #endif // BIRD_H
