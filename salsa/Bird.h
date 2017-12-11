@@ -30,10 +30,12 @@ public:
     /* Getters
      */
     Texture& getTexture() { return this->texture; }
+    bool getMove() { return this->move; }
 
     /* Setters
      */
     void setAnimate(bool animate) { this->animate = animate; }
+    void setMove(bool move) { this->move = move; }
 
 private:
     // whether to animate the bird (moving wings, tail, ...) or not
