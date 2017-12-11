@@ -18,54 +18,105 @@ void Bird::init() {
 
 /*
  * Draw all parts
- * For now, just draw them where they are.
+ * Each part is saved as an object at the origin (in general,
+ * one side at the origin for all pieces except the body).
+ *
+ * Before drawing, translate each object back into the correct
+ * position so that the bird is complete. These transformations are
+ * hardcoded based on how the files were created, the transformations
+ * are detailed in the file part_translations.txt
+ * Do the transformations in the same order as they are described in
+ * the file, but reverse the sign (except for the depth axis that is
+ * inverted in Blender) and remember that Z and Y are inverted in Blender.
+ *
+ * Finally apply local transformations to animate the bird.
  */
 void Bird::draw() {
 
 //    glRotatef(180.0, 0.0f, 1.0f, 0.0f);
 
+    /* Body:
+     * - static
+     * - center at origin
+     * - no movement applied
+     */
     glPushMatrix();
     body.draw();
     glPopMatrix();
 
+    /* Head:
+     * - can move (e.g. look a bit around)
+     * - back of head (neck connection) at origin
+     * - translated forward and down
+     */
     glPushMatrix();
-//    glTranslatef(0.0f, 0.0f, 2.0f);
-//    glRotatef(10*sin(psi/10), 0.0f, 0.0f, 1.0f);
+    glTranslatef(0.0f, -0.5f, 1.2f);
     head.draw();
     glPopMatrix();
 
+    /* Tail:
+     * - can move (e.g. up and down)
+     * - connection with body at origin
+     * - translated backwards
+     */
     glPushMatrix();
-//    glRotatef(3*sin(tau), 1.0f, 0.0f, 0.0f);
-//    glTranslatef(0.0f, 0.0f, -1.4f);
+    glTranslatef(0.0f, 0.0f, -1.75f);
     tail.draw();
     glPopMatrix();
 
 
-    glPushMatrix();
-    // hardcoded based on which movements were applied to the part on Blender
-//    glTranslatef(-1.0f, 0.0f, 0.45f);
-//    glRotatef(-17.36, 1.0f, 0.0f, 0.0f);     // X: -17.36 deg
-//    glRotatef(10.00, 0.0f, 1.0f, 0.0f);     // Y: 10.00 deg
-//    glRotatef(-19.7, 0.0f, 0.0f, 1.0f);     // Z: -19.7 deg
+
+    /* Left wing:
+     * - can move (e.g. up and down)
+     * - connection with body at origin
+     * - two pieces, many transformations (also nested)
+     */
+    glPushMatrix(); // push left_wing_close
+    glTranslatef(0.7f, 0.2f, 0.0f);
+    glRotatef(16.0f, 0.0f, 0.0f, 1.0f);      // Z: + 16.0
+    glRotatef(-6.75f, 0.0f, 1.0f, 0.0f);     // Y: -  6.75
 
     // animation
-//    if (this->animate) {
-//      glRotatef(4*sin(psi/10), 0.0f, 0.0f, 1.0f);
-//    }
+    if (this->animate) {
+      glRotatef(32*sin(psi/30), 0.0f, 0.0f, 1.0f);
+    }
     left_wing_close.draw();
-    glPopMatrix();
 
-    glPushMatrix();
+    /* translate and draw far part after close part of wing
+     */
+    glPopMatrix();  // pop left_wing_close
+
+    glPushMatrix(); // push left_wing_far
+//    glLoadIdentity();
     left_wing_far.draw();
-    glPopMatrix();
+    glPopMatrix();  // pop left_wing_far
 
-    glPushMatrix();
-    right_wing_far.draw();
-    glPopMatrix();
 
-    glPushMatrix();
+
+    /* Right wing:
+     * - can move (e.g. up and down)
+     * - connection with body at origin
+     * - two pieces, many transformations (also nested)
+     */
+    glPushMatrix(); // push right_wing_close
+    glTranslatef(-0.7f, 0.2f, 0.0f);
+    glRotatef(-16.0f, 0.0f, 0.0f, 1.0f);    // Z: - 16.0
+    glRotatef(6.75f, 0.0f, 1.0f, 0.0f);     // Y: +  6.75
+
+    // animation
+    if (this->animate) {
+      glRotatef(32*sin(psi/30), 0.0f, 0.0f, -1.0f);
+    }
     right_wing_close.draw();
-    glPopMatrix();
+
+    /* translate and draw far part after close part of wing
+     */
+    glPopMatrix();  // pop right_wing_close
+
+    glPushMatrix(); // push right_wing_far
+//    glLoadIdentity();
+    right_wing_far.draw();
+    glPopMatrix();  // pop right_wing_far
 }
 
 /*
