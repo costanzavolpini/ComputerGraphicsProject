@@ -73,8 +73,8 @@ void Bird::draw() {
      */
     glPushMatrix(); // push left_wing_close
     glTranslatef(0.7f, 0.2f, 0.0f);
-    glRotatef(16.0f, 0.0f, 0.0f, 1.0f);      // Z: + 16.0
-    glRotatef(-6.75f, 0.0f, 1.0f, 0.0f);     // Y: -  6.75
+    glRotatef(16.0f, 0.0f, 0.0f, 1.0f);     // Z: + 16.0
+    glRotatef(-6.75f, 0.0f, 1.0f, 0.0f);    // Y: -  6.75
 
     // animation
     if (this->animate) {
@@ -84,12 +84,18 @@ void Bird::draw() {
 
     /* translate and draw far part after close part of wing
      */
-    glPopMatrix();  // pop left_wing_close
-
     glPushMatrix(); // push left_wing_far
-//    glLoadIdentity();
+    glTranslatef(1.6f, 0.0f, 1.0f);
+    glRotatef(-12.0f, 0.0f, 0.0f, 1.0f);    // Z: - 12.0
+
+    // animation
+    if (this->animate) {
+      glRotatef(16*sin(psi/30), 0.0f, 0.0f, 1.0f);
+    }
     left_wing_far.draw();
     glPopMatrix();  // pop left_wing_far
+
+    glPopMatrix();  // pop left_wing_close
 
 
 
@@ -111,12 +117,18 @@ void Bird::draw() {
 
     /* translate and draw far part after close part of wing
      */
-    glPopMatrix();  // pop right_wing_close
-
     glPushMatrix(); // push right_wing_far
-//    glLoadIdentity();
+    glTranslatef(-1.25f, 0.0f, 0.5f);
+    glRotatef(12.0f, 0.0f, 0.0f, 1.0f);     // Z: + 12.0
+
+    // animation
+    if (this->animate) {
+      glRotatef(16*sin(psi/30), 0.0f, 0.0f, -1.0f);
+    }
     right_wing_far.draw();
     glPopMatrix();  // pop right_wing_far
+
+    glPopMatrix();  // pop right_wing_close
 }
 
 /*
