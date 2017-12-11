@@ -1,0 +1,50 @@
+################################################################################
+###   Transformations applied to objects to bring them all to local origin   ###
+################################################################################
+
+These translations and rotations were applied in Blender. In OpenGL, use the inverse transformations to bring the objects where they need to be.
+
+In Blender, Z and Y are inverted (Z is vertical axis, Y is depth axis).
+Furthermore, the depth axis is inverted.
+
+
+________________________________________________________________________________
+head.obj
+
+translate
+Y: +  1.2
+Z: +  0.5
+
+
+________________________________________________________________________________
+tail.obj
+
+translate
+Y: -  1.75
+
+
+________________________________________________________________________________
+left_wing_close.obj
+
+translate
+X: -  0.7
+Z: -  0.2
+
+rotate (degrees)
+Y: + 16.0
+Z: +  6.75
+
+
+
+
+
+________________________________________________________________________________
+right_wing_close.obj
+
+translate
+X: -  0.7
+Z: -  0.2
+
+rotate (degrees)
+Y: - 16.0
+Z: -  6.75
