@@ -273,7 +273,7 @@ void CCanvas::paintGL() {
     //    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
         glTranslatef(cos(tau) * 4.0f, sin(tau), sin(2*tau) * 4.0f);
         glScalef(scale, scale, scale);
-        glRotatef(2*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
+        glRotatef(2.5*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
     }
 
     /*
