@@ -46,6 +46,7 @@ void CCanvas::initializeGL() {
      */
     bird.init();
     bird.setAnimate(true);
+    bird.setMove(true);
     scene.init();
 
     // Example for debugging
@@ -267,11 +268,13 @@ void CCanvas::paintGL() {
     /*
      * Update flight path of the bird
      */
-    GLfloat scale = 0.2f;
-//    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
-    glTranslatef(cos(tau) * 4.0f, sin(tau), sin(2*tau) * 4.0f);
-    glScalef(scale, scale, scale);
-
+    if (bird.getMove()) {
+        GLfloat scale = 0.2f;
+    //    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
+        glTranslatef(cos(tau) * 4.0f, sin(tau), sin(2*tau) * 4.0f);
+        glScalef(scale, scale, scale);
+        glRotatef(2*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
+    }
 
     /*
      * rotate Bird (testing) (don't put anything between here and bird.draw())
