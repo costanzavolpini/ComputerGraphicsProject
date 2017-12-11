@@ -12,10 +12,10 @@
 #include "Base.h"
 #include "texture.hpp"
 
-#include "ObjModel.h"
-#include "PlyModel.h"
-
 using namespace std;
+//#include "ObjModel.h"
+#include "Bird.h"
+#include "Scene.h"
 
 /************************************************************************/
 /* Canvas to draw                                                       */
@@ -25,8 +25,9 @@ class CCanvas : public QGLWidget {
 
   public:
     explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
-                                            textureTrain("./models/train/train.jpg"),
-                                            eagleModel("./models/bird/eagle_meshlab.obj") {
+                                            bird(),
+                                            scene() {
+
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
@@ -55,21 +56,30 @@ class CCanvas : public QGLWidget {
                        const GLdouble zFar);
 
     enum View {
-        Perspective = 0, // View the scene from a perspective (from above, from a side, or whatever)
-        Cockpit          // View the scene from the train cockpit (if you want, or whatever other view)
+        Side = 0,        // View the scene from a side perspective
+        Eyes,            // View the scene from the Bird's eyes
+        Above            // View the scene from an above perspective
     };
 
     void setView(View _view);
 
-    // Models and textures
-    Texture textureTrain;
-    // Model loaded from .obj format
-    ObjModel eagleModel;
-    GLfloat tau;
 
-    // NO
-    // Model loaded from .ply format
-    //    PlyModel eagleModel;
+    /*
+     * Scene objects. The Bird object contains all parts of the bird, and supports animation of
+     * the individual pieces; the Scene object contains the environment specification (the
+     * mountains, with trees and such, plus maybe a sun and clouds. Maybe.)
+     */
+
+    // Bird object
+    Bird bird;
+
+    // Scene object
+    Scene scene;
+
+    /*
+     * For rotation (testing)
+     */
+    GLfloat tau;
 };
 
 #endif

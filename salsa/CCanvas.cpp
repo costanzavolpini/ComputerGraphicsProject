@@ -7,7 +7,7 @@ using namespace std;
 //-----------------------------------------------------------------------------
 
 void CCanvas::initializeGL() {
-    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);              // black background
+    glClearColor(0.8117647059f, 0.8470588235f, 0.862745098f, 0.5f);              // black background
     glClearDepth(1.0f);                                // depth buffer setup
     glEnable(GL_DEPTH_TEST);                           // enables depth testing
     glDepthFunc(GL_LEQUAL);                            // the type of depth testing to do
@@ -30,8 +30,10 @@ void CCanvas::initializeGL() {
     GLfloat lightpos[] = {0.0, 0.0, 1.0, 0.0};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
-    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
+//    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
+    GLfloat lightAmb[] = {1.0, 1.0, 1.0}; //TODO remove
+//    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
+    GLfloat lightDiff[] = {1.0, 1.0, 1.0}; //TODO remove
     GLfloat lightSpec[] = {0.5, 0.5, 0.5};
 
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
@@ -42,11 +44,13 @@ void CCanvas::initializeGL() {
      * Before you can use the texture you need to initialize it by calling the setTexture() method.
      * Before you can use OBJ/PLY model, you need to initialize it by calling init() method.
      */
-//    textureTrain.setTexture();
-    eagleModel.init();
+    bird.init();
+    bird.setAnimate(true);
+    bird.setMove(true);
+    scene.init();
 
-    // do not use PLY
-//    modelTrain2.init();
+    // Example for debugging
+//    example.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -175,12 +179,16 @@ void CCanvas::resizeGL(int width, int height) {
 
 void CCanvas::setView(View _view) {
     switch (_view) {
-        case Perspective:
+        case Side:
             glTranslatef(1.0, -2.5, -10.0);
             glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
             break;
-        case Cockpit:
-            // Maybe you want to have an option to view the scene from the train cockpit, up to you
+        case Eyes:
+            // Maybe you want to have an option to view the scene from the bird's eyes, up to you
+            break;
+        case Above:
+            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+            glTranslatef(0.0, 2.5, -10.0);
             break;
     }
 }
@@ -196,13 +204,13 @@ void CCanvas::paintGL() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Setup the current view
-    setView(View::Perspective);
+    setView(View::Side);
 
     // You can always change the light position here if you want
-    GLfloat lightpos[] = {0.0f, 0.0f, 10.0f, 0.0f};
+    GLfloat lightpos[] = {-4.0f, 0.0f, 10.0f, 0.0f};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-    /**** Axes in the global coordinate system ****/
+    /*** Draw Axes in the global coordinate system ***/
 
     glDisable(GL_LIGHTING);
     glColor3f(1.0f, 0.0f, 0.0f);
@@ -225,49 +233,108 @@ void CCanvas::paintGL() {
     /**** Setup and draw your objects ****/
 
     // You can freely enable/disable some of the lights in the scene as you wish
-//    glEnable(GL_LIGHT0);
-    //glDisable(GL_LIGHT1);
+    glEnable(GL_LIGHT0);
+//    glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
 
-    glColor3f(0.5f, 0.5f, 0.5f);
-    GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
-    GLfloat diff[] = {0.7f, 0.7f, 0.7f};
-    GLfloat spec[] = {0.1f, 0.1f, 0.1f};
-    GLfloat shin = 0.0001;
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
+//    glColor3f(0.5f, 0.5f, 0.5f);
+//    GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
+//    GLfloat diff[] = {0.7f, 0.7f, 0.7f};
+//    GLfloat spec[] = {0.1f, 0.1f, 0.1f};
+//    GLfloat shin = 0.0001;
+//    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
+//    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
+//    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
+//    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
 
 
-    // Drawing the object with texture
-//    textureTrain.bind();
-    // You can stack new transformation matrix if you don't want
-    // the previous transformations to apply on this object
+    /*
+     * Bind texture and push new matrix before drawing
+     */
+    bird.getTexture().bind();
     glPushMatrix();
+
     /*
      * Obtaining the values of the current modelview matrix
      *  GLfloat matrix[16];
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
 
-    // rotate Eagle (debug)
-    tau += 1.0f;
-    GLfloat scale = 10.0f;
-    glRotatef(tau, 0.0f, 1.0f, 0.0f);
-    glScalef(scale, scale, scale);
 
-    // Look at the ObjModel class to see how the drawing is done
-    eagleModel.draw();
-    // Look at the PlyModel class to see how the drawing is done
-    /*
-     * The models you load can have different scales. If you are drawing a proper model but nothing
-     * is shown, check the scale of the model, your camera could be for example inside of it.
+    /* Increment tau (for project main animation)
      */
-    //glScalef(0.02f, 0.02f, 0.02f);
-    //modelTrain2.draw();
-    // Remove the last transformation matrix from the stack - you have drawn your last
-    // object with a new transformation and now you go back to the previous one
+    tau += 0.002f;
+
+    /*
+     * Update flight path of the bird
+     */
+    bird.fly(tau);
+
+    /*
+     * rotate Bird (testing) (don't put anything between here and bird.draw())
+     */
+//    GLfloat scale = 0.2f;
+//    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+
+    // oscillate
+//    glRotatef(100*tau, 7.0f, 13.0f, 11.0f);
+//    glRotatef(-45.0f, 0.0f, 1.0f, 0.0f);
+//    glRotatef(50*tau, 1.0f, 0.0f, 0.0f);
+//    glTranslatef(4.0f, 2.0f, 0.0f);
+//    glScalef(scale, scale, scale);
+
+    /*
+     * Draw Bird
+     */
+    bird.inc();
+    bird.draw();
+
+
+    /*
+     * Unbind texture and pop matrix
+     * Remove the last transformation matrix from the stack - you have drawn your last
+     * object with a new transformation and now you go back to the previous one
+     */
     glPopMatrix();
-    textureTrain.unbind();
+    bird.getTexture().unbind();
+
+
+
+
+
+
+
+
+
+    /*
+     * Bind texture and push new matrix before drawing
+     */
+    scene.getTexture().bind();
+    glPushMatrix();
+
+    /*
+     * Obtaining the values of the current modelview matrix
+     *  GLfloat matrix[16];
+     *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
+    */
+
+    GLfloat scale2 = 1.0f;
+    glRotatef(0.0f, 0.0f, 0.0f, 0.0f);
+    glTranslatef(-5.0f, -9.0f, -30.0f);
+    glScalef(scale2, scale2, scale2);
+
+
+    /*
+     * Draw Scene
+     */
+    scene.draw();
+
+
+    /*
+     * Unbind texture and pop matrix
+     * Remove the last transformation matrix from the stack - you have drawn your last
+     * object with a new transformation and now you go back to the previous one
+     */
+    glPopMatrix();
+    scene.getTexture().unbind();
 }

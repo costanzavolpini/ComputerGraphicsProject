@@ -22,6 +22,10 @@ void ObjModel::init() {
     glGenBuffers(1, &uvBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
     glBufferData(GL_ARRAY_BUFFER, fuvs.size() * sizeof(GLfloat), &fuvs[0], GL_STATIC_DRAW);
+
+    glGenBuffers(1, &normalsBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalsBuffer);
+    glBufferData(GL_ARRAY_BUFFER, fnormals.size() * sizeof(GLfloat), &fnormals[0], GL_STATIC_DRAW);
 }
 
 void ObjModel::draw() {
@@ -43,8 +47,13 @@ void ObjModel::draw() {
     );
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+    glBindBuffer(GL_ARRAY_BUFFER, normalsBuffer);
+    glNormalPointer(GL_FLOAT,3*sizeof(GL_FLOAT),0);
+    glEnableClientState(GL_NORMAL_ARRAY);
+
     glDrawArrays(GL_TRIANGLES, 0, fvertices.size() / 3);
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
 }

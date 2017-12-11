@@ -1,0 +1,13 @@
+Left (which is actually right)
+
+inner:
+X: 17.36 deg
+Y (Z on openGL): -19.7 deg
+Z (Y on openGL): 10.00 deg
+
+Right (...)
+
+inner:
+X: 17.36 deg
+Y (Z on openGL): 19.7 deg
+Z (Y on openGL): 10.00 deg
