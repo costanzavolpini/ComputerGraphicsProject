@@ -4,20 +4,23 @@
 #include "ObjModel.h"
 #include "texture.hpp"
 
+static std::string parts_path = "./models/bird/eagle/parts_2/";
+static std::string textures_path = "./models/bird/eagle/texture/";
+
 class Bird {
 
 public:
     /*
      * Load object files and store vertices, normals, uvs
      */
-    Bird() : body("./models/bird/eagle/parts/body.obj"),
-             head("./models/bird/eagle/parts/head.obj"),
-             tail("./models/bird/eagle/parts/tail.obj"),
-             left_wing_far("./models/bird/eagle/parts/left-wings-outer.obj"),
-             left_wing_close("./models/bird/eagle/parts/left-wings-inner.obj"),
-             right_wing_far("./models/bird/eagle/parts/right-wings-outer.obj"),
-             right_wing_close("./models/bird/eagle/parts/right-wings-inner.obj"),
-             texture("./models/bird/eagle/texture/full.png") {
+    Bird() : body(parts_path + "body.obj"),
+             head(parts_path + "head.obj"),
+             tail(parts_path + "tail.obj"),
+             left_wing_far(parts_path + "left_wing_far.obj"),
+             left_wing_close(parts_path + "left_wing_close.obj"),
+             right_wing_far(parts_path + "right_wing_far.obj"),
+             right_wing_close(parts_path + "right_wing_close.obj"),
+             texture(textures_path + "full.png") {
         std::cout << "Loaded Bird parts" << std::endl;
     }
 
