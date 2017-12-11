@@ -277,8 +277,8 @@ void CCanvas::paintGL() {
      * rotate Bird (testing) (don't put anything between here and bird.draw())
      */
 //    GLfloat scale = 0.2f;
-    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
-    glRotatef(10*sin(tau/100), 0.0f, 1.0f, 0.0f);
+//    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+//    glRotatef(10*sin(tau/100), 0.0f, 1.0f, 0.0f);
 //    glTranslatef(4.0f, 2.0f, 0.0f);
 //    glScalef(scale, scale, scale);
 
