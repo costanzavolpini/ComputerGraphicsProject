@@ -20,7 +20,7 @@ void Bird::init() {
  */
 void Bird::draw() {
 
-    glRotatef(180.0, 0.0f, 1.0f, 0.0f);
+//    glRotatef(180.0, 0.0f, 1.0f, 0.0f);
 
     glPushMatrix();
     body.draw();

@@ -257,10 +257,10 @@ void CCanvas::paintGL() {
      * rotate Bird (testing)
      */
     tau += 1.0f;
-//    GLfloat scale = 0.2f;
-    glRotatef(0.5*tau, 0.0f, 0.0f, 10.0f);
-//    glTranslatef(4.0f, 2.0f, 0.0f);
-//    glScalef(scale, scale, scale);
+    GLfloat scale = 0.2f;
+    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
+    glTranslatef(3.0f, 3.0f, 0.0f);
+    glScalef(scale, scale, scale);
 
 
     /*
