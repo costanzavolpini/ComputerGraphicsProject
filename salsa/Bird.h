@@ -29,11 +29,11 @@ public:
     void draw();
 
     void inc();
+    void fly(GLfloat tau);
 
     /* Getters
      */
     Texture& getTexture() { return this->texture; }
-    bool getMove() { return this->move; }
 
     /* Setters
      */

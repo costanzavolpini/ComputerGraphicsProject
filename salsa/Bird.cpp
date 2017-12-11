@@ -125,3 +125,13 @@ void Bird::draw() {
 void Bird::inc() {
     psi += 1.0;
 }
+
+void Bird::fly(GLfloat tau) {
+    if (this->move) {
+        GLfloat scale = 0.2f;
+    //    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
+        glTranslatef(cos(tau) * 4.0f, sin(tau), sin(2*tau) * 4.0f);
+        glScalef(scale, scale, scale);
+        glRotatef(2.5*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
+    }
+}
