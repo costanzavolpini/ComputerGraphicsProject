@@ -7,6 +7,9 @@ These translations and rotations were applied in Blender. In OpenGL, use the inv
 In Blender, Z and Y are inverted (Z is vertical axis, Y is depth axis).
 Furthermore, the depth axis is inverted.
 
+All transformations done in World coordinates (in Blender: Shift+Ctrl+Alt+C 
+and select "Origin to 3D Cursor", which should be at the origin).
+
 
 ________________________________________________________________________________
 head.obj
@@ -25,6 +28,7 @@ Y: -  1.75
 
 ________________________________________________________________________________
 left_wing_close.obj
+left_wing_far.obj
 
 translate
 X: -  0.7
@@ -34,12 +38,21 @@ rotate (degrees)
 Y: + 16.0
 Z: +  6.75
 
+-----------------
+left_wing_far.obj
 
+translate
+X: -  1.6
+Y: +  1.0
+
+rotate (degrees)
+Y: - 12.0
 
 
 
 ________________________________________________________________________________
 right_wing_close.obj
+right_wing_far.obj
 
 translate
 X: -  0.7
@@ -48,3 +61,15 @@ Z: -  0.2
 rotate (degrees)
 Y: - 16.0
 Z: -  6.75
+
+------------------
+right_wing_far.obj
+
+translate
+X: +  1.25
+Y: +  0.5
+
+rotate (degrees)
+Y: + 12.0
+
+
