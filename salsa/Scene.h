@@ -11,7 +11,7 @@ public:
      */
     Scene() : landscape("./models/mountains/mountains.obj"),
               texture("./models/mountains/texture/Color.tif") {
-        std::cout << "Loaded mountains parts" << std::endl;
+        std::cout << "Loaded Scene parts" << std::endl;
     }
 
     void init();

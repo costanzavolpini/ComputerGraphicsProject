@@ -1,4 +1,5 @@
 #include "Bird.h"
+#include "CCanvas.h"
 
 /*
  * Initialise buffers to draw
@@ -14,6 +15,8 @@ void Bird::init() {
     texture.setTexture();
 
     psi = 0.0f;
+    direction = startDirection;
+    position = flyPath(0.0f);
 }
 
 /*
@@ -33,16 +36,41 @@ void Bird::init() {
  */
 void Bird::draw() {
 
-//    glRotatef(180.0, 0.0f, 1.0f, 0.0f);
+    /*
+     * transformations to see bird from different perspectives
+     */
+//    GLfloat scale = 0.2f;
+//    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+
+    // oscillate
+//    glRotatef(100*tau, 0.0f, 1.0f, 0.0f);
+//    glRotatef(-45.0f, 0.0f, 1.0f, 0.0f);
+//    glRotatef(50*tau, 1.0f, 0.0f, 0.0f);
+//    glTranslatef(4.0f, 2.0f, 0.0f);
+//    glScalef(scale, scale, scale);
+
+
+
+    /*
+     * Slight correction to whole bird (it should not look too much down)
+     */
+    glRotatef(-6.0f, 1, 0, 0);
+
+
 
     /* Body:
      * - static
      * - center at origin
      * - no movement applied
      */
-    glPushMatrix();
+    glPushMatrix(); // push body
+    if (this->animate) {
+      glTranslatef(0.0f, -0.1 * sin(psi), 0.0f);
+      glRotatef(sin(psi), 1.0f, 0.0f, 0.0f);
+    }
     body.draw();
-    glPopMatrix();
+
+
 
     /* Head:
      * - can move (e.g. look a bit around)
@@ -78,7 +106,7 @@ void Bird::draw() {
 
     // animation
     if (this->animate) {
-      glRotatef(32*sin(psi/30), 0.0f, 0.0f, 1.0f);
+      glRotatef(32*sin(psi), 0.0f, 0.0f, 1.0f);
     }
     left_wing_close.draw();
 
@@ -90,7 +118,7 @@ void Bird::draw() {
 
     // animation
     if (this->animate) {
-      glRotatef(16*sin(psi/30), 0.0f, 0.0f, 1.0f);
+      glRotatef(16*sin(psi), 0.0f, 0.0f, 1.0f);
     }
     left_wing_far.draw();
     glPopMatrix();  // pop left_wing_far
@@ -111,7 +139,7 @@ void Bird::draw() {
 
     // animation
     if (this->animate) {
-      glRotatef(32*sin(psi/30), 0.0f, 0.0f, -1.0f);
+      glRotatef(32*sin(psi), 0.0f, 0.0f, -1.0f);
     }
     right_wing_close.draw();
 
@@ -123,27 +151,57 @@ void Bird::draw() {
 
     // animation
     if (this->animate) {
-      glRotatef(16*sin(psi/30), 0.0f, 0.0f, -1.0f);
+      glRotatef(16*sin(psi), 0.0f, 0.0f, -1.0f);
     }
     right_wing_far.draw();
     glPopMatrix();  // pop right_wing_far
 
     glPopMatrix();  // pop right_wing_close
+
+    glPopMatrix();  // pop body
 }
 
 /*
  * Increment number for animations
  */
 void Bird::inc() {
-    psi += 1.0;
+    psi += psiIncrement;
 }
 
 void Bird::fly(GLfloat tau) {
     if (this->move) {
+
+        Point3d nextPos = flyPath(tau);
+        glTranslatef(nextPos.x(), nextPos.y(), nextPos.z());
+
         GLfloat scale = 0.2f;
-    //    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
-        glTranslatef(cos(tau) * 4.0f, sin(tau), sin(2*tau) * 4.0f);
         glScalef(scale, scale, scale);
-        glRotatef(2.5*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
+
+        direction = (nextPos - this->position).normalized();
+//        direction = Point3d(-1.0f, 0.0f, -1.0f);
+
+        Point3d directionXZ = Point3d(direction.x(), 0.0f, direction.z());
+        Point3d startDirectionXZ = Point3d(startDirection.x(), 0.0f, startDirection.z());
+        GLfloat yAngle = startDirectionXZ.getAngle(directionXZ) * 180/PI;
+
+
+
+        GLfloat sign = (startDirectionXZ ^ directionXZ).y();
+        yAngle = copysign(yAngle, sign);
+        glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
+
+//        glRotatef(2.5*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
+
+        // save pos
+        this->position = nextPos;
     }
+}
+
+/*
+ * Return position relative to the given tau
+ */
+Point3d Bird::flyPath(GLfloat tau) {
+    GLfloat scale = 2 / (3 - cos(2*tau));
+    return Point3d(scale * cos(tau) * 8.0f, 2* sin(tau/13) + 2.0f, scale * 8.0f * sin(2*tau)/2);
+//    return Point3d(4*cos(tau), 0, 4*sin(tau));
 }
