@@ -34,7 +34,10 @@ class CCanvas : public QGLWidget {
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
         timer->start(10);
         tau = 0.0f;
+        sunPosition = Point3d(2.8, 5.5, -10);
     }
+
+    static constexpr GLfloat sunSpeed = 50.0f;
 
   protected:
     void initializeGL();
@@ -80,6 +83,8 @@ class CCanvas : public QGLWidget {
 
     //Sky object
     Sky sky;
+
+    Point3d sunPosition;
 
     /*
      * For rotation (testing)

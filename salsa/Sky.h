@@ -15,7 +15,7 @@ public:
     }
 
     void init();
-    void draw();
+    void draw(GLfloat tau);
 
     /* Getters
      */
