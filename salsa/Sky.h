@@ -1,17 +1,17 @@
-#ifndef SCENE_H
-#define SCENE_H
+#ifndef SKY_H
+#define SKY_H
 
 #include "ObjModel.h"
 #include "texture.hpp"
 
-class Scene {
+class Sky {
 public:
     /*
      * Load object files and store vertices, normals, uvs
      */
-    Scene() : landscape("./models/mountains/mountains.obj"),
-              texture("./models/mountains/texture/Color.tif") {
-        std::cout << "Loaded mountains parts" << std::endl;
+    Sky() : atmosphere("./models/sky/sky.obj"),
+              texture("./models/sky/texture/skydome.png") {
+        std::cout << "Loaded Sky parts" << std::endl;
     }
 
     void init();
@@ -23,10 +23,10 @@ public:
 
 private:
     // all parts of the scene (ObjModels, drawable independently)
-    ObjModel landscape;
+    ObjModel atmosphere;
 
     // texture
     Texture texture;
 };
 
-#endif // SCENE_H
+#endif // SKY_H

@@ -34,7 +34,7 @@ void CCanvas::initializeGL() {
     GLfloat lightAmb[] = {1.0, 1.0, 1.0}; //TODO remove
 //    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
     GLfloat lightDiff[] = {1.0, 1.0, 1.0}; //TODO remove
-    GLfloat lightSpec[] = {0.5, 0.5, 0.5};
+    GLfloat lightSpec[] = {1.0, 1.0, 1.0};
 
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
@@ -48,6 +48,7 @@ void CCanvas::initializeGL() {
     bird.setAnimate(true);
     bird.setMove(true);
     scene.init();
+    sky.init();
 
     // Example for debugging
 //    example.init();
@@ -328,6 +329,7 @@ void CCanvas::paintGL() {
      * Draw Scene
      */
     scene.draw();
+    
 
 
     /*
@@ -337,4 +339,11 @@ void CCanvas::paintGL() {
      */
     glPopMatrix();
     scene.getTexture().unbind();
+
+    sky.getTexture().bind();
+
+
+    sky.draw();
+
+    sky.getTexture().unbind();
 }

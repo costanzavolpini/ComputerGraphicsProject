@@ -16,6 +16,7 @@ using namespace std;
 //#include "ObjModel.h"
 #include "Bird.h"
 #include "Scene.h"
+#include "Sky.h"
 
 /************************************************************************/
 /* Canvas to draw                                                       */
@@ -26,7 +27,8 @@ class CCanvas : public QGLWidget {
   public:
     explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
                                             bird(),
-                                            scene() {
+                                            scene(),
+                                            sky() {
 
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
@@ -75,6 +77,9 @@ class CCanvas : public QGLWidget {
 
     // Scene object
     Scene scene;
+
+    //Sky object
+    Sky sky;
 
     /*
      * For rotation (testing)
