@@ -157,6 +157,8 @@ void Bird::fly(GLfloat tau) {
         Point3d startDirectionXZ = Point3d(startDirection.x(), 0.0f, startDirection.z());
         GLfloat yAngle = startDirectionXZ.getAngle(directionXZ) * 180/PI;
 
+
+
         GLfloat sign = (startDirectionXZ ^ directionXZ).y();
         yAngle = copysign(yAngle, sign);
         glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
@@ -172,6 +174,7 @@ void Bird::fly(GLfloat tau) {
  * Return position relative to the given tau
  */
 Point3d Bird::flyPath(GLfloat tau) {
-    return Point3d(cos(tau) * 4.0f, sin(tau), 4.0f * sin(2*tau)/2);
+    GLfloat scale = 2 / (3 - cos(2*tau));
+    return Point3d(scale * cos(tau) * 8.0f, 2* sin(tau/13) + 2.0f, scale * 8.0f * sin(2*tau)/2);
 //    return Point3d(4*cos(tau), 0, 4*sin(tau));
 }
