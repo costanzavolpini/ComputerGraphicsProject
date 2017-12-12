@@ -34,6 +34,8 @@ class CCanvas : public QGLWidget {
         tau = 0.0f;
     }
 
+    static constexpr GLfloat tauIncrement = 0.01f;
+
   protected:
     void initializeGL();
     void resizeGL(int width, int height);

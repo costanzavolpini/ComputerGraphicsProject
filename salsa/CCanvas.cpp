@@ -263,7 +263,7 @@ void CCanvas::paintGL() {
 
     /* Increment tau (for project main animation)
      */
-    tau += 0.002f;
+    tau += tauIncrement;
 
     /*
      * Update flight path of the bird

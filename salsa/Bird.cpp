@@ -1,4 +1,5 @@
 #include "Bird.h"
+#include "CCanvas.h"
 
 /*
  * Initialise buffers to draw
@@ -14,6 +15,8 @@ void Bird::init() {
     texture.setTexture();
 
     psi = 0.0f;
+    direction = startDirection;
+    position = flyPath(0.0f);
 }
 
 /*
@@ -78,7 +81,7 @@ void Bird::draw() {
 
     // animation
     if (this->animate) {
-      glRotatef(32*sin(psi/30), 0.0f, 0.0f, 1.0f);
+      glRotatef(32*sin(psi), 0.0f, 0.0f, 1.0f);
     }
     left_wing_close.draw();
 
@@ -90,7 +93,7 @@ void Bird::draw() {
 
     // animation
     if (this->animate) {
-      glRotatef(16*sin(psi/30), 0.0f, 0.0f, 1.0f);
+      glRotatef(16*sin(psi), 0.0f, 0.0f, 1.0f);
     }
     left_wing_far.draw();
     glPopMatrix();  // pop left_wing_far
@@ -111,7 +114,7 @@ void Bird::draw() {
 
     // animation
     if (this->animate) {
-      glRotatef(32*sin(psi/30), 0.0f, 0.0f, -1.0f);
+      glRotatef(32*sin(psi), 0.0f, 0.0f, -1.0f);
     }
     right_wing_close.draw();
 
@@ -123,7 +126,7 @@ void Bird::draw() {
 
     // animation
     if (this->animate) {
-      glRotatef(16*sin(psi/30), 0.0f, 0.0f, -1.0f);
+      glRotatef(16*sin(psi), 0.0f, 0.0f, -1.0f);
     }
     right_wing_far.draw();
     glPopMatrix();  // pop right_wing_far
@@ -135,15 +138,40 @@ void Bird::draw() {
  * Increment number for animations
  */
 void Bird::inc() {
-    psi += 1.0;
+    psi += psiIncrement;
 }
 
 void Bird::fly(GLfloat tau) {
     if (this->move) {
+
+        Point3d nextPos = flyPath(tau);
+        glTranslatef(nextPos.x(), nextPos.y(), nextPos.z());
+
         GLfloat scale = 0.2f;
-    //    glRotatef(tau, 0.5f*sin(tau/500), -1.0f, 0.0f);
-        glTranslatef(cos(tau) * 4.0f, sin(tau), sin(2*tau) * 4.0f);
         glScalef(scale, scale, scale);
-        glRotatef(2.5*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
+
+        direction = (nextPos - this->position).normalized();
+//        direction = Point3d(-1.0f, 0.0f, -1.0f);
+
+        Point3d directionXZ = Point3d(direction.x(), 0.0f, direction.z());
+        Point3d startDirectionXZ = Point3d(startDirection.x(), 0.0f, startDirection.z());
+        GLfloat yAngle = startDirectionXZ.getAngle(directionXZ) * 180/PI;
+
+        GLfloat sign = (startDirectionXZ ^ directionXZ).y();
+        yAngle = copysign(yAngle, sign);
+        glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
+
+//        glRotatef(2.5*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
+
+        // save pos
+        this->position = nextPos;
     }
+}
+
+/*
+ * Return position relative to the given tau
+ */
+Point3d Bird::flyPath(GLfloat tau) {
+    return Point3d(cos(tau) * 4.0f, 0, sin(2*tau) * 4.0f);
+//    return Point3d(4*cos(tau), 0, 4*sin(tau));
 }

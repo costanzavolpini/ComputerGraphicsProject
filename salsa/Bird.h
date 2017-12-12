@@ -22,14 +22,20 @@ public:
              right_wing_close(parts_path + "right_wing_close.obj"),
              texture(textures_path + "full.png") {
         std::cout << "Loaded Bird parts" << std::endl;
+
+        startDirection = Point3d(0.0f, 0.0f, 1.0f);
     }
 
+    Point3d startDirection;
+
+    static constexpr GLfloat psiIncrement = 0.1f;
 
     void init();
     void draw();
 
     void inc();
     void fly(GLfloat tau);
+    Point3d flyPath(GLfloat tau);
 
     /* Getters
      */
@@ -61,6 +67,10 @@ private:
 
     // incremented number for animations
     GLfloat psi;
+
+    // current position and direction the bird is facing
+    Point3d direction;
+    Point3d position;
 };
 
 #endif // BIRD_H
