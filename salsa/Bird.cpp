@@ -36,16 +36,41 @@ void Bird::init() {
  */
 void Bird::draw() {
 
-//    glRotatef(180.0, 0.0f, 1.0f, 0.0f);
+    /*
+     * transformations to see bird from different perspectives
+     */
+//    GLfloat scale = 0.2f;
+//    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+
+    // oscillate
+//    glRotatef(100*tau, 0.0f, 1.0f, 0.0f);
+//    glRotatef(-45.0f, 0.0f, 1.0f, 0.0f);
+//    glRotatef(50*tau, 1.0f, 0.0f, 0.0f);
+//    glTranslatef(4.0f, 2.0f, 0.0f);
+//    glScalef(scale, scale, scale);
+
+
+
+    /*
+     * Slight correction to whole bird (it should not look too much down)
+     */
+    glRotatef(-6.0f, 1, 0, 0);
+
+
 
     /* Body:
      * - static
      * - center at origin
      * - no movement applied
      */
-    glPushMatrix();
+    glPushMatrix(); // push body
+    if (this->animate) {
+      glTranslatef(0.0f, -0.1 * sin(psi), 0.0f);
+      glRotatef(sin(psi), 1.0f, 0.0f, 0.0f);
+    }
     body.draw();
-    glPopMatrix();
+
+
 
     /* Head:
      * - can move (e.g. look a bit around)
@@ -132,6 +157,8 @@ void Bird::draw() {
     glPopMatrix();  // pop right_wing_far
 
     glPopMatrix();  // pop right_wing_close
+
+    glPopMatrix();  // pop body
 }
 
 /*
