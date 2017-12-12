@@ -22,7 +22,8 @@ HEADERS += ./Base.h \
            ./ObjModel.h \
            ./objloader.hpp \
            ./Bird.h \
-           ./Scene.h
+           ./Scene.h \
+           ./Sky.h
 
 # Source files
 SOURCES += ./CCanvas.cpp \
@@ -32,7 +33,8 @@ SOURCES += ./CCanvas.cpp \
            ./ObjModel.cpp \
            ./objloader.cpp \
            ./Bird.cpp \
-           ./Scene.cpp
+           ./Scene.cpp\
+           ./Sky.cpp
 
 # Forms
 FORMS += ./GLRender.ui

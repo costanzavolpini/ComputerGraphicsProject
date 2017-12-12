@@ -27,14 +27,14 @@ void CCanvas::initializeGL() {
      * light in eye coordinates, and attenuation is enabled. The default position is (0,0,1,0); thus,
      * the default light source is directional, parallel to, and in the direction of the -z axis.
      */
-    GLfloat lightpos[] = {0.0, 0.0, 1.0, 0.0};
+    GLfloat lightpos[] = {(float)sunPosition.x(), (float)sunPosition.y(), (float)sunPosition.z(), 0.0f};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
 //    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
     GLfloat lightAmb[] = {1.0, 1.0, 1.0}; //TODO remove
 //    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
     GLfloat lightDiff[] = {1.0, 1.0, 1.0}; //TODO remove
-    GLfloat lightSpec[] = {0.5, 0.5, 0.5};
+    GLfloat lightSpec[] = {1.0, 1.0, 1.0};
 
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
@@ -48,6 +48,7 @@ void CCanvas::initializeGL() {
     bird.setAnimate(true);
     bird.setMove(true);
     scene.init();
+    sky.init();
 
     // Example for debugging
 //    example.init();
@@ -207,8 +208,13 @@ void CCanvas::paintGL() {
     setView(View::Side);
 
     // You can always change the light position here if you want
-    GLfloat lightpos[] = {-4.0f, 0.0f, 10.0f, 0.0f};
+//    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));
+//    GLfloat lightpos[] = {(float)newSunPos.x(), (float)newSunPos.y(), (float)newSunPos.z(), 0.0f};
+    glPushMatrix();
+    GLfloat lightpos[] = {(float)sunPosition.x(), (float)sunPosition.y(), (float)sunPosition.z(), 0.0f};
+    glRotatef(sunSpeed*tau, 0, 1, 0);
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+    glPopMatrix();
 
     /*** Draw Axes in the global coordinate system ***/
 
@@ -228,6 +234,12 @@ void CCanvas::paintGL() {
         glVertex3f(0.0f, 0.0f, -3.0f);
         glVertex3f(0.0f, 0.0f, 60.0f);
     glEnd();
+    // vector to sun
+//    glColor3f(1.0f, 1.0f, 1.0f);
+//    glBegin(GL_LINES);
+//        glVertex3f(newSunPos.x()*100000, newSunPos.y()*100000, newSunPos.z()*100000);
+//        glVertex3f(0.0f, 0.0f, 0.0f);
+//    glEnd();
     glEnable(GL_LIGHTING);
 
     /**** Setup and draw your objects ****/
@@ -328,6 +340,7 @@ void CCanvas::paintGL() {
      * Draw Scene
      */
     scene.draw();
+    
 
 
     /*
@@ -337,4 +350,10 @@ void CCanvas::paintGL() {
      */
     glPopMatrix();
     scene.getTexture().unbind();
+
+    sky.getTexture().bind();
+
+    sky.draw(tau);
+
+    sky.getTexture().unbind();
 }
