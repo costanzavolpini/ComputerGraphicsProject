@@ -172,6 +172,6 @@ void Bird::fly(GLfloat tau) {
  * Return position relative to the given tau
  */
 Point3d Bird::flyPath(GLfloat tau) {
-    return Point3d(cos(tau) * 4.0f, 0, sin(2*tau) * 4.0f);
+    return Point3d(cos(tau) * 4.0f, sin(tau), 4.0f * sin(2*tau)/2);
 //    return Point3d(4*cos(tau), 0, 4*sin(tau));
 }
