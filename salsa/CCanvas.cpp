@@ -6,12 +6,20 @@ using namespace std;
 
 //-----------------------------------------------------------------------------
 
+void CCanvas::keyPressEvent(QKeyEvent *event) {
+    cout << "ciao" << endl;
+    cout << event->key() << endl;
+    if (event->key() == Qt::Key_A) {
+        // do your stuff here
+    }
+}
+
 void CCanvas::initializeGL() {
-    glClearColor(0.8117647059f, 0.8470588235f, 0.862745098f, 0.5f);              // black background
-    glClearDepth(1.0f);                                // depth buffer setup
-    glEnable(GL_DEPTH_TEST);                           // enables depth testing
-    glDepthFunc(GL_LEQUAL);                            // the type of depth testing to do
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // really nice perspective calculations
+    glClearColor(0.8117647059f, 0.8470588235f, 0.862745098f, 0.5f); // black background
+    glClearDepth(1.0f);                                             // depth buffer setup
+    glEnable(GL_DEPTH_TEST);                                        // enables depth testing
+    glDepthFunc(GL_LEQUAL);                                         // the type of depth testing to do
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);              // really nice perspective calculations
     glShadeModel(GL_SMOOTH);
 
     // One light source
@@ -30,9 +38,9 @@ void CCanvas::initializeGL() {
     GLfloat lightpos[] = {(float)sunPosition.x(), (float)sunPosition.y(), (float)sunPosition.z(), 0.0f};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-//    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
-    GLfloat lightAmb[] = {1.0, 1.0, 1.0}; //TODO remove
-//    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
+    //    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
+    GLfloat lightAmb[] = {1.0, 1.0, 1.0};  //TODO remove
+                                           //    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
     GLfloat lightDiff[] = {1.0, 1.0, 1.0}; //TODO remove
     GLfloat lightSpec[] = {1.0, 1.0, 1.0};
 
@@ -51,7 +59,7 @@ void CCanvas::initializeGL() {
     sky.init();
 
     // Example for debugging
-//    example.init();
+    //    example.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -208,11 +216,11 @@ void CCanvas::paintGL() {
     setView(View::Side);
 
     // You can always change the light position here if you want
-//    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));
-//    GLfloat lightpos[] = {(float)newSunPos.x(), (float)newSunPos.y(), (float)newSunPos.z(), 0.0f};
+    //    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));
+    //    GLfloat lightpos[] = {(float)newSunPos.x(), (float)newSunPos.y(), (float)newSunPos.z(), 0.0f};
     glPushMatrix();
     GLfloat lightpos[] = {(float)sunPosition.x(), (float)sunPosition.y(), (float)sunPosition.z(), 0.0f};
-    glRotatef(sunSpeed*tau, 0, 1, 0);
+    glRotatef(sunSpeed * tau, 0, 1, 0);
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
     glPopMatrix();
 
@@ -221,44 +229,43 @@ void CCanvas::paintGL() {
     glDisable(GL_LIGHTING);
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_LINES);
-        glVertex3f(-3.0f, 0.0f, 0.0f);
-        glVertex3f(60.0f, 0.0f, 0.0f);
+    glVertex3f(-3.0f, 0.0f, 0.0f);
+    glVertex3f(60.0f, 0.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_LINES);
-        glVertex3f(0.0f, -3.0f, 0.0f);
-        glVertex3f(0.0f, 60.0f, 0.0f);
+    glVertex3f(0.0f, -3.0f, 0.0f);
+    glVertex3f(0.0f, 60.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
-        glVertex3f(0.0f, 0.0f, -3.0f);
-        glVertex3f(0.0f, 0.0f, 60.0f);
+    glVertex3f(0.0f, 0.0f, -3.0f);
+    glVertex3f(0.0f, 0.0f, 60.0f);
     glEnd();
     // vector to sun
-//    glColor3f(1.0f, 1.0f, 1.0f);
-//    glBegin(GL_LINES);
-//        glVertex3f(newSunPos.x()*100000, newSunPos.y()*100000, newSunPos.z()*100000);
-//        glVertex3f(0.0f, 0.0f, 0.0f);
-//    glEnd();
+    //    glColor3f(1.0f, 1.0f, 1.0f);
+    //    glBegin(GL_LINES);
+    //        glVertex3f(newSunPos.x()*100000, newSunPos.y()*100000, newSunPos.z()*100000);
+    //        glVertex3f(0.0f, 0.0f, 0.0f);
+    //    glEnd();
     glEnable(GL_LIGHTING);
 
     /**** Setup and draw your objects ****/
 
     // You can freely enable/disable some of the lights in the scene as you wish
     glEnable(GL_LIGHT0);
-//    glDisable(GL_LIGHT1);
+    //    glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
 
-//    glColor3f(0.5f, 0.5f, 0.5f);
-//    GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
-//    GLfloat diff[] = {0.7f, 0.7f, 0.7f};
-//    GLfloat spec[] = {0.1f, 0.1f, 0.1f};
-//    GLfloat shin = 0.0001;
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
-
+    //    glColor3f(0.5f, 0.5f, 0.5f);
+    //    GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
+    //    GLfloat diff[] = {0.7f, 0.7f, 0.7f};
+    //    GLfloat spec[] = {0.1f, 0.1f, 0.1f};
+    //    GLfloat shin = 0.0001;
+    //    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
+    //    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
+    //    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
+    //    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
 
     /*
      * Bind texture and push new matrix before drawing
@@ -271,7 +278,6 @@ void CCanvas::paintGL() {
      *  GLfloat matrix[16];
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
-
 
     /* Increment tau (for project main animation)
      */
@@ -288,7 +294,6 @@ void CCanvas::paintGL() {
     bird.inc();
     bird.draw();
 
-
     /*
      * Unbind texture and pop matrix
      * Remove the last transformation matrix from the stack - you have drawn your last
@@ -296,14 +301,6 @@ void CCanvas::paintGL() {
      */
     glPopMatrix();
     bird.getTexture().unbind();
-
-
-
-
-
-
-
-
 
     /*
      * Bind texture and push new matrix before drawing
@@ -322,13 +319,10 @@ void CCanvas::paintGL() {
     glTranslatef(-5.0f, -9.0f, -30.0f);
     glScalef(scale2, scale2, scale2);
 
-
     /*
      * Draw Scene
      */
     scene.draw();
-    
-
 
     /*
      * Unbind texture and pop matrix

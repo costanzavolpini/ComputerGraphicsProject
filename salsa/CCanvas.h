@@ -44,6 +44,7 @@ class CCanvas : public QGLWidget {
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+    virtual void keyPressEvent(QKeyEvent *);
 
   private:
     void lookAt(const GLdouble eyex,
@@ -62,13 +63,12 @@ class CCanvas : public QGLWidget {
                        const GLdouble zFar);
 
     enum View {
-        Side = 0,        // View the scene from a side perspective
-        Eyes,            // View the scene from the Bird's eyes
-        Above            // View the scene from an above perspective
+        Side = 0, // View the scene from a side perspective
+        Eyes,     // View the scene from the Bird's eyes
+        Above     // View the scene from an above perspective
     };
 
     void setView(View _view);
-
 
     /*
      * Scene objects. The Bird object contains all parts of the bird, and supports animation of
