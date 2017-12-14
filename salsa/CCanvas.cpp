@@ -6,14 +6,6 @@ using namespace std;
 
 //-----------------------------------------------------------------------------
 
-void CCanvas::keyPressEvent(QKeyEvent *event) {
-    cout << "ciao" << endl;
-    cout << event->key() << endl;
-    if (event->key() == Qt::Key_A) {
-        // do your stuff here
-    }
-}
-
 void CCanvas::initializeGL() {
     glClearColor(0.8117647059f, 0.8470588235f, 0.862745098f, 0.5f); // black background
     glClearDepth(1.0f);                                             // depth buffer setup
@@ -337,4 +329,21 @@ void CCanvas::paintGL() {
     sky.draw(tau);
 
     sky.getTexture().unbind();
+}
+
+void CCanvas::keyPressEvent(QKeyEvent *event) {
+    switch (event->key()) {
+        case Qt::Key_W:
+            cout << 'W' << endl;
+            break;
+        case Qt::Key_A:
+            cout << 'A' << endl;
+            break;
+        case Qt::Key_S:
+            cout << 'S' << endl;
+            break;
+        case Qt::Key_D:
+            cout << 'D' << endl;
+            break;
+    }
 }
