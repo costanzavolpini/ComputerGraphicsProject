@@ -99,9 +99,9 @@ void CCanvas::lookAt(const GLdouble eyeX,
     Point3d VP(eyeX, eyeY, eyeZ);
     Point3d q(centerX, centerY, centerZ);
     Point3d VUP(upX, upY, upZ);
-    Point3d VPN = VP-q;
+    Point3d VPN = VP - q;
 
-    GLdouble *mat = new GLdouble[16];           // remember: column-major order!
+    GLdouble *mat = new GLdouble[16]; // remember: column-major order!
 
     // set up the LookAt matrix correctly!
     Point3d p_prime = VP;
@@ -124,64 +124,18 @@ void CCanvas::lookAt(const GLdouble eyeX,
     // column 3
     mat[8] = x_prime[2];
     mat[9] = y_prime[2];
-    mat[10]= z_prime[2];
-    mat[11]= 0;
+    mat[10] = z_prime[2];
+    mat[11] = 0;
 
     // sure? column 4
-    mat[12]= -x_prime * p_prime;
-    mat[13]= -y_prime * p_prime;
-    mat[14]= -z_prime * p_prime;
-    mat[15]= 1;
+    mat[12] = -x_prime * p_prime;
+    mat[13] = -y_prime * p_prime;
+    mat[14] = -z_prime * p_prime;
+    mat[15] = 1;
 
     glMultMatrixd(mat);
 
     delete[] mat;
-
-//    GLdouble *mat = new GLdouble[16];
-
-//    // TODO: add computation for the lookat here!
-//    Point3d X, Y, Z;
-
-//    // create new coordinate system
-//    Z = Point3d(eyex - centerx, eyey - centery, eyez - centerz);
-//    Z.normalize();
-
-//    // compute Y and X
-//    Y = Point3d(upx, upy, upz);
-//    X = Y ^ Z;
-
-//    // recompute X
-//    Y = Z ^ X;
-
-//    // normalize
-//    X.normalize();
-//    Y.normalize();
-
-//    Point3d eye(eyex, eyey, eyez);
-
-//    mat[0] = X.x();
-//    mat[1] = X.y();
-//    mat[2] = X.z();
-//    mat[3] = -X * eye;
-
-//    mat[4] = Y.x();
-//    mat[5] = Y.y();
-//    mat[6] = Y.z();
-//    mat[7] = -Y * eye;
-
-//    mat[8] = Z.x();
-//    mat[9] = Z.y();
-//    mat[10] = Z.z();
-//    mat[11] = -Z * eye;
-
-//    mat[12] = 0.0;
-//    mat[13] = 0.0;
-//    mat[14] = 0.0;
-//    mat[15] = 1.0;
-
-//    glMultMatrixd(mat);
-
-//    delete[] mat;
 }
 
 void CCanvas::resizeGL(int width, int height) {
@@ -228,7 +182,7 @@ void CCanvas::setView(View _view) {
             break;
         }
         case Eyes: {
-        // view from bird's eyes
+            // view from bird's eyes
             Point3d bird_position = bird.getPosition();
             Point3d head_position = bird_position + 0.25f * bird.getDirection();
             Point3d bird_line_of_sight = bird_position + 1.0f * bird.getDirection();
@@ -242,6 +196,13 @@ void CCanvas::setView(View _view) {
             Point3d camera_above(-25, 10, -25);
             lookAt(camera_above.x(), camera_above.y(), camera_above.z(),
                    bird_position.x(), bird_position.y(), bird_position.z(),
+                   0, 1, 0);
+            break;
+        }
+        case Manual: {
+            Point3d line_of_sight = manualPosition + manualDirection;
+            lookAt(manualPosition.x(), manualPosition.y(), manualPosition.z(),
+                   line_of_sight.x(), line_of_sight.y(), line_of_sight.z(),
                    0, 1, 0);
             break;
         }
@@ -259,7 +220,7 @@ void CCanvas::paintGL() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Setup the current view
-    setView(View::Above);
+    setView(View::Manual);
 
     // You can always change the light position here if you want
     //    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));
@@ -302,17 +263,6 @@ void CCanvas::paintGL() {
     glEnable(GL_LIGHT0);
     //    glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
-
-    //    glColor3f(0.5f, 0.5f, 0.5f);
-    //    GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
-    //    GLfloat diff[] = {0.7f, 0.7f, 0.7f};
-    //    GLfloat spec[] = {0.1f, 0.1f, 0.1f};
-    //    GLfloat shin = 0.0001;
-    //    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
-    //    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
-    //    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
-    //    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
-
     /*
      * Bind texture and push new matrix before drawing
      */
@@ -386,18 +336,28 @@ void CCanvas::paintGL() {
 }
 
 void CCanvas::keyPressEvent(QKeyEvent *event) {
+    Point3d forward(manualDirection.x(), 0, manualDirection.z());
+    Point3d rightward(manualDirection.z(), 0, manualDirection.x());
+    Point3d upperward(0, 1, 0);
+
     switch (event->key()) {
         case Qt::Key_W:
-            cout << 'W' << endl;
+            manualPosition = manualPosition + forward;
             break;
         case Qt::Key_A:
-            cout << 'A' << endl;
+            manualPosition = manualPosition + rightward;
             break;
         case Qt::Key_S:
-            cout << 'S' << endl;
+            manualPosition = manualPosition - forward;
             break;
         case Qt::Key_D:
-            cout << 'D' << endl;
+            manualPosition = manualPosition - rightward;
+            break;
+        case Qt::Key_Space:
+            manualPosition = manualPosition + upperward;
+            break;
+        case Qt::Key_Z:
+            manualPosition = manualPosition - upperward;
             break;
     }
 }

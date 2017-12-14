@@ -35,6 +35,8 @@ class CCanvas : public QGLWidget {
         timer->start(10);
         tau = 0.0f;
         sunPosition = Point3d(2.8, 5.5, -10);
+        manualPosition = Point3d(0, 0, 0);
+        manualDirection = Point3d(0, 0, -1);
     }
 
     static constexpr GLfloat sunSpeed = 50.0f;
@@ -65,10 +67,15 @@ class CCanvas : public QGLWidget {
     enum View {
         Side = 0, // View the scene from a side perspective
         Eyes,     // View the scene from the Bird's eyes
-        Above     // View the scene from an above perspective
+        Above,    // View the scene from an above perspective
+        Manual
     };
 
-    void setView(View _view);
+    Point3d manualPosition;
+    Point3d manualDirection;
+
+    void
+    setView(View _view);
 
     /*
      * Scene objects. The Bird object contains all parts of the bird, and supports animation of
