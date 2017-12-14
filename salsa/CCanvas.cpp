@@ -87,60 +87,101 @@ void CCanvas::glPerspective(const GLdouble fovy, const GLdouble aspect, const GL
     delete[] mat;
 }
 
-void CCanvas::lookAt(const GLdouble eyex,
-                     const GLdouble eyey,
-                     const GLdouble eyez,
-                     const GLdouble centerx,
-                     const GLdouble centery,
-                     const GLdouble centerz,
-                     const GLdouble upx,
-                     const GLdouble upy,
-                     const GLdouble upz) {
-    GLdouble *mat = new GLdouble[16];
+void CCanvas::lookAt(const GLdouble eyeX,
+                     const GLdouble eyeY,
+                     const GLdouble eyeZ,
+                     const GLdouble centerX,
+                     const GLdouble centerY,
+                     const GLdouble centerZ,
+                     const GLdouble upX,
+                     const GLdouble upY,
+                     const GLdouble upZ) {
+    Point3d VP(eyeX, eyeY, eyeZ);
+    Point3d q(centerX, centerY, centerZ);
+    Point3d VUP(upX, upY, upZ);
+    Point3d VPN = VP-q;
 
-    // TODO: add computation for the lookat here!
-    Point3d X, Y, Z;
+    GLdouble *mat = new GLdouble[16];           // remember: column-major order!
 
-    // create new coordinate system
-    Z = Point3d(eyex - centerx, eyey - centery, eyez - centerz);
-    Z.normalize();
+    // set up the LookAt matrix correctly!
+    Point3d p_prime = VP;
+    Point3d z_prime = VPN.normalized();
+    Point3d x_prime = (VUP ^ z_prime).normalized();
+    Point3d y_prime = z_prime ^ x_prime;
 
-    // compute Y and X
-    Y = Point3d(upx, upy, upz);
-    X = Y ^ Z;
+    // column 1
+    mat[0] = x_prime[0];
+    mat[1] = y_prime[0];
+    mat[2] = z_prime[0];
+    mat[3] = 0;
 
-    // recompute X
-    Y = Z ^ X;
+    // column 2
+    mat[4] = x_prime[1];
+    mat[5] = y_prime[1];
+    mat[6] = z_prime[1];
+    mat[7] = 0;
 
-    // normalize
-    X.normalize();
-    Y.normalize();
+    // column 3
+    mat[8] = x_prime[2];
+    mat[9] = y_prime[2];
+    mat[10]= z_prime[2];
+    mat[11]= 0;
 
-    Point3d eye(eyex, eyey, eyez);
-
-    mat[0] = X.x();
-    mat[1] = X.y();
-    mat[2] = X.z();
-    mat[3] = -X * eye;
-
-    mat[4] = Y.x();
-    mat[5] = Y.y();
-    mat[6] = Y.z();
-    mat[7] = -Y * eye;
-
-    mat[8] = Z.x();
-    mat[9] = Z.y();
-    mat[10] = Z.z();
-    mat[11] = -Z * eye;
-
-    mat[12] = 0.0;
-    mat[13] = 0.0;
-    mat[14] = 0.0;
-    mat[15] = 1.0;
+    // sure? column 4
+    mat[12]= -x_prime * p_prime;
+    mat[13]= -y_prime * p_prime;
+    mat[14]= -z_prime * p_prime;
+    mat[15]= 1;
 
     glMultMatrixd(mat);
 
     delete[] mat;
+
+//    GLdouble *mat = new GLdouble[16];
+
+//    // TODO: add computation for the lookat here!
+//    Point3d X, Y, Z;
+
+//    // create new coordinate system
+//    Z = Point3d(eyex - centerx, eyey - centery, eyez - centerz);
+//    Z.normalize();
+
+//    // compute Y and X
+//    Y = Point3d(upx, upy, upz);
+//    X = Y ^ Z;
+
+//    // recompute X
+//    Y = Z ^ X;
+
+//    // normalize
+//    X.normalize();
+//    Y.normalize();
+
+//    Point3d eye(eyex, eyey, eyez);
+
+//    mat[0] = X.x();
+//    mat[1] = X.y();
+//    mat[2] = X.z();
+//    mat[3] = -X * eye;
+
+//    mat[4] = Y.x();
+//    mat[5] = Y.y();
+//    mat[6] = Y.z();
+//    mat[7] = -Y * eye;
+
+//    mat[8] = Z.x();
+//    mat[9] = Z.y();
+//    mat[10] = Z.z();
+//    mat[11] = -Z * eye;
+
+//    mat[12] = 0.0;
+//    mat[13] = 0.0;
+//    mat[14] = 0.0;
+//    mat[15] = 1.0;
+
+//    glMultMatrixd(mat);
+
+//    delete[] mat;
 }
 
 void CCanvas::resizeGL(int width, int height) {
@@ -180,17 +221,30 @@ void CCanvas::resizeGL(int width, int height) {
 
 void CCanvas::setView(View _view) {
     switch (_view) {
-        case Side:
-            glTranslatef(1.0, -2.5, -10.0);
-            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+        case Side: {
+            lookAt(-0.5, -0.25f, -10,
+                   0, 0, 0,
+                   0, 1, 0);
             break;
-        case Eyes:
-            // Maybe you want to have an option to view the scene from the bird's eyes, up to you
+        }
+        case Eyes: {
+        // view from bird's eyes
+            Point3d bird_position = bird.getPosition();
+            Point3d head_position = bird_position + 0.25f * bird.getDirection();
+            Point3d bird_line_of_sight = bird_position + 1.0f * bird.getDirection();
+            lookAt(head_position.x(), head_position.y() + 0.15f, head_position.z(),
+                   bird_line_of_sight.x(), bird_line_of_sight.y() - 0.1f, bird_line_of_sight.z(),
+                   0.0f, 1.0f, 0.0f);
             break;
-        case Above:
-            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
-            glTranslatef(0.0, 2.5, -10.0);
+        }
+        case Above: {
+            Point3d bird_position = bird.getPosition();
+            Point3d camera_above(-25, 10, -25);
+            lookAt(camera_above.x(), camera_above.y(), camera_above.z(),
+                   bird_position.x(), bird_position.y(), bird_position.z(),
+                   0, 1, 0);
             break;
+        }
     }
 }
 
@@ -205,7 +259,7 @@ void CCanvas::paintGL() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Setup the current view
-    setView(View::Side);
+    setView(View::Eyes);
 
     // You can always change the light position here if you want
     //    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));

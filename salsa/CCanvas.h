@@ -37,7 +37,7 @@ class CCanvas : public QGLWidget {
         sunPosition = Point3d(2.8, 5.5, -10);
     }
 
-    static constexpr GLfloat sunSpeed = 5.0f;
+    static constexpr GLfloat sunSpeed = 50.0f;
     static constexpr GLfloat tauIncrement = 0.01f;
 
   protected:
