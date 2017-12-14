@@ -259,7 +259,7 @@ void CCanvas::paintGL() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Setup the current view
-    setView(View::Eyes);
+    setView(View::Above);
 
     // You can always change the light position here if you want
     //    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));

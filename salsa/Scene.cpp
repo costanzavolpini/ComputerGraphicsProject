@@ -7,8 +7,8 @@ void Scene::init() {
 
 void Scene::draw() {
     glPushMatrix();
-    landscape.draw();
-
     // TODO: translate down
+    glTranslatef(0,-10,0);
+    landscape.draw();
     glPopMatrix();
 }
