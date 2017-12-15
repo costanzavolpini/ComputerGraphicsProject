@@ -339,6 +339,7 @@ void CCanvas::keyPressEvent(QKeyEvent *event) {
     Point3d forward(manualDirection.x(), 0, manualDirection.z());
     Point3d rightward(manualDirection.z(), 0, manualDirection.x());
     Point3d upperward(0, 1, 0);
+    cout << manualDirection.x() << ' ' << manualDirection.y() << ' ' << manualDirection.z() << endl;
 
     switch (event->key()) {
         case Qt::Key_W:
@@ -358,6 +359,28 @@ void CCanvas::keyPressEvent(QKeyEvent *event) {
             break;
         case Qt::Key_Z:
             manualPosition = manualPosition - upperward;
+            break;
+        case Qt::Key_J:
+            manualAngleHorizontal -= 0.02;
+            manualDirection.x() = cos(manualAngleHorizontal);
+            manualDirection.z() = sin(manualAngleHorizontal);
+            break;
+        case Qt::Key_L:
+            manualAngleHorizontal += 0.02;
+            manualDirection.x() = cos(manualAngleHorizontal);
+            manualDirection.z() = sin(manualAngleHorizontal);
+            break;
+        case Qt::Key_I:
+            if (manualAngleVertical <= 1) {
+                manualAngleVertical += 0.02;
+                manualDirection.y() = manualAngleVertical;
+            }
+            break;
+        case Qt::Key_K:
+            if (manualAngleVertical >= -1) {
+                manualAngleVertical -= 0.02;
+                manualDirection.y() = manualAngleVertical;
+            }
             break;
     }
 }

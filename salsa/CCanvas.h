@@ -37,6 +37,8 @@ class CCanvas : public QGLWidget {
         sunPosition = Point3d(2.8, 5.5, -10);
         manualPosition = Point3d(0, 0, 0);
         manualDirection = Point3d(0, 0, -1);
+        manualAngleHorizontal = 0;
+        manualAngleVertical = 0;
     }
 
     static constexpr GLfloat sunSpeed = 50.0f;
@@ -73,6 +75,8 @@ class CCanvas : public QGLWidget {
 
     Point3d manualPosition;
     Point3d manualDirection;
+    double manualAngleHorizontal;
+    double manualAngleVertical;
 
     void
     setView(View _view);
