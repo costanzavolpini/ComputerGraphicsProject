@@ -2,6 +2,16 @@
 #include "Base.h"
 #include "Sphere.h"
 
+//shadow
+#define SHADOW_MAP_RATIO 2
+#define RENDER_WIDTH 640.0
+#define RENDER_HEIGHT 480.0
+// Hold id of the framebuffer for light POV rendering
+GLuint fboId;
+
+// Z values will be rendered to this texture when using fboId framebuffer
+GLuint depthTextureId;
+
 using namespace std;
 
 //-----------------------------------------------------------------------------
@@ -194,6 +204,53 @@ void CCanvas::setView(View _view) {
     }
 }
 
+//-----------------------------------------------------------------------------
+
+void CCanvas::generateShadow(){
+      int shadowMapWidth = RENDER_WIDTH * SHADOW_MAP_RATIO;
+	  int shadowMapHeight = RENDER_HEIGHT * SHADOW_MAP_RATIO;
+	
+	  GLenum FBOstatus;
+
+	  // Try to use a texture depth component
+	  glGenTextures(1, &depthTextureId);
+	  glBindTexture(GL_TEXTURE_2D, depthTextureId);
+
+	  // GL_LINEAR does not make sense for depth texture. However, next tutorial shows usage of GL_LINEAR and PCF
+	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	  // Remove artifact on the edges of the shadowmap
+	  glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+	  glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
+
+	  // No need to force GL_DEPTH_COMPONENT24, drivers usually give you the max precision if available
+	  glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapWidth, shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+	  glBindTexture(GL_TEXTURE_2D, 0);
+
+	  // create a framebuffer object
+	  glGenFramebuffersEXT(1, &fboId);
+	  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboId);
+
+	  // Instruct openGL that we won't bind a color texture with the currently bound FBO
+	  glDrawBuffer(GL_NONE);
+	  glReadBuffer(GL_NONE);
+ 
+	  // attach the texture to FBO depth attachment point
+	  glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,GL_TEXTURE_2D, depthTextureId, 0);
+
+	  // check FBO status
+	  FBOstatus = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+	  if(FBOstatus != GL_FRAMEBUFFER_COMPLETE_EXT)
+		  printf("GL_FRAMEBUFFER_COMPLETE_EXT failed, CANNOT use FBO\n");
+
+	  // switch back to window-system-provided framebuffer
+	  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+}
+
+
+//-----------------------------------------------------------------------------
+
 void CCanvas::paintGL() {
     // clear screen and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -289,19 +346,12 @@ void CCanvas::paintGL() {
     bird.draw();
 
     /**
-     * Shadow Management
+     * Shadow Management - reference: http://fabiensanglard.net/shadowmapping/index.php
      */
-    glm::vec3 lightInvDir = glm::vec3(lightpos[0],lightpos[1],lightpos[2]);
 
-// Compute the MVP matrix from the light's point of view
-// glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10,10,-10,10,-10,20);
-// glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
-// glm::mat4 depthModelMatrix = glm::mat4(1.0);
-// glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+    generateShadow();
 
- // Send our transformation to the currently bound shader,
- // in the "MVP" uniform
-// glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
+
 
 
 
@@ -312,12 +362,6 @@ void CCanvas::paintGL() {
      */
     glPopMatrix();
     bird.getTexture().unbind();
-
-
-
-
-
-
 
 
 
