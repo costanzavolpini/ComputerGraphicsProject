@@ -337,7 +337,7 @@ void CCanvas::paintGL() {
 
 void CCanvas::keyPressEvent(QKeyEvent *event) {
     Point3d forward(manualDirection.x(), 0, manualDirection.z());
-    Point3d rightward(manualDirection.z(), 0, manualDirection.x());
+    Point3d rightward(manualDirection.z(), 0, -manualDirection.x());
     Point3d upperward(0, 1, 0);
     cout << manualDirection.x() << ' ' << manualDirection.y() << ' ' << manualDirection.z() << endl;
 
