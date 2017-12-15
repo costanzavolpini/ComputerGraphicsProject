@@ -15,6 +15,7 @@
 using namespace std;
 //#include "ObjModel.h"
 #include "Bird.h"
+#include "Camera.h"
 #include "Scene.h"
 #include "Sky.h"
 
@@ -35,10 +36,6 @@ class CCanvas : public QGLWidget {
         timer->start(10);
         tau = 0.0f;
         sunPosition = Point3d(2.8, 5.5, -10);
-        manualPosition = Point3d(0, 0, 0);
-        manualDirection = Point3d(0, 0, -1);
-        manualAngleHorizontal = 0;
-        manualAngleVertical = 0;
     }
 
     static constexpr GLfloat sunSpeed = 50.0f;
@@ -51,35 +48,12 @@ class CCanvas : public QGLWidget {
     virtual void keyPressEvent(QKeyEvent *);
 
   private:
-    void lookAt(const GLdouble eyex,
-                const GLdouble eyey,
-                const GLdouble eyez,
-                const GLdouble centerx,
-                const GLdouble centery,
-                const GLdouble centerz,
-                const GLdouble upx,
-                const GLdouble upy,
-                const GLdouble upz);
-
     void glPerspective(const GLdouble fovy,
                        const GLdouble aspect,
                        const GLdouble zNear,
                        const GLdouble zFar);
 
-    enum View {
-        Side = 0, // View the scene from a side perspective
-        Eyes,     // View the scene from the Bird's eyes
-        Above,    // View the scene from an above perspective
-        Manual
-    };
-
-    Point3d manualPosition;
-    Point3d manualDirection;
-    double manualAngleHorizontal;
-    double manualAngleVertical;
-
-    void
-    setView(View _view);
+    Camera camera;
 
     /*
      * Scene objects. The Bird object contains all parts of the bird, and supports animation of
@@ -89,6 +63,8 @@ class CCanvas : public QGLWidget {
 
     // Bird object
     Bird bird;
+
+    Camera::View view = Camera::View::Eyes;
 
     // Scene object
     Scene scene;
