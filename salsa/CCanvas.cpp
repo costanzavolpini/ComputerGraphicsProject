@@ -223,8 +223,8 @@ void CCanvas::generateShadow(){
     GLuint shadowMapSize = 1024;
 
     // create the shadow map
-    GLint shadowMap;
-     glGenTextures(1, &shadowMap);
+    GLuint shadowMap;
+    glGenTextures(1, &shadowMap);
     glBindTexture(GL_TEXTURE_2D, shadowMap);
 
     //texture can store floating point numbers with great precision (GL_DEPTH_COMPONENT32)
@@ -250,7 +250,7 @@ void CCanvas::generateShadow(){
     // Rendering 2
 
     // create framebuffer
-    GLint shadowFramebuffer;
+    GLuint shadowFramebuffer;
     glGenFramebuffers(1, &shadowFramebuffer);
 
     // attach the shadow map to framebuffer (GL_DEPHT_ATTACHMENT)
@@ -360,13 +360,10 @@ void CCanvas::paintGL() {
     bird.inc();
     bird.draw();
 
-    /**
+    /*
      * Shadow Management
      */
     generateShadow();
-
-
-
 
 
     /*
