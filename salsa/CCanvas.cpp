@@ -206,7 +206,61 @@ void CCanvas::setView(View _view) {
 
 //-----------------------------------------------------------------------------
 
+/**
+* Rendering 1. Create shadowMap (it contains the depth of each element that is visible from the light source (sun))
+* Rendering 2. View from camera's point of view. shadowFramebuffer contains standard projection of vertices into screen space.
+* Vertex-shader contains each vertex that should be projected into space.
+* Fragment-shader can access to shadowMap, it contains position of vertex in light source's space.
+* Using screen space position of fragment, check: 
+* If distance from shadowMap < distance current fragment to light source, then current fragment is in shadow.
+* 
+* reference: http://www.sunandblackcat.com/tipFullView.php?l=eng&topicid=34 
+*/
+
 void CCanvas::generateShadow(){
+    // Rendering 1
+    // size of the shadow map
+    GLuint shadowMapSize = 1024;
+
+    // create the shadow map
+    GLint shadowMap;
+     glGenTextures(1, &shadowMap);
+    glBindTexture(GL_TEXTURE_2D, shadowMap);
+
+    //texture can store floating point numbers with great precision (GL_DEPTH_COMPONENT32)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, shadowMapSize, shadowMapSize, 
+                    0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    // GL_CLAMP_TO_EDGE setups the shadow map in such a way that
+    // fragments for which the shadow map is undefined
+    // will get values from closest edges of the shadow map
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    // comparison mode of the shadow map
+    // distance from a fragment to the light source should be compared with the distance in the shadow map
+    // GL_EQUAL means that sampling will return 1 in cases when the distance is smaller than the distance 
+    // in the shadow map, and so the fragment is in the light. In other cases, sampling will return 0, which means that fragment is in shadow.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+
+    ////////////////////////////////////////////////////
+    // Rendering 2
+
+    // create framebuffer
+    GLint shadowFramebuffer;
+    glGenFramebuffers(1, &shadowFramebuffer);
+
+    // attach the shadow map to framebuffer (GL_DEPHT_ATTACHMENT)
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, shadowFramebuffer);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                            GL_TEXTURE_2D, shadowMap, 0);
+
+    // depth is stored in z-buffer to which the shadow map is attached,
+    // so there is no need for any color buffers
+    glDrawBuffer(GL_NONE);
 }
 
 
@@ -308,16 +362,7 @@ void CCanvas::paintGL() {
 
     /**
      * Shadow Management
-     * 1 Rendering. Create shadow map (it contains the depth of each element that is visible from the light source (sun))
-     * 2 Rendering. View from camera's point of view. Framebuffer contains standard projection of vertices into screen space.
-     * Vertex-shader contains each vertex that should be projected into space.
-     * Fragment-shader can access to shadow map, it contains position of vertex in light source's space.
-     * Using screen space position of fragment, check: 
-     * If distance from shadow map < distance current fragment to light source, then current fragment is in shadow.
-     * 
-     * reference: http://www.sunandblackcat.com/tipFullView.php?l=eng&topicid=34 
      */
-
     generateShadow();
 
 
