@@ -3,13 +3,14 @@
 
 #include "ObjModel.h"
 #include "texture.hpp"
+#include <iostream>
 
 static std::string parts_path = "./models/bird/eagle/parts_2/";
 static std::string textures_path = "./models/bird/eagle/texture/";
 
 class Bird {
 
-public:
+  public:
     /*
      * Load object files and store vertices, normals, uvs
      */
@@ -24,6 +25,14 @@ public:
         std::cout << "Loaded Bird parts" << std::endl;
 
         startDirection = Point3d(0.0f, 0.0f, 1.0f);
+
+        forwarding = true;
+        speed = 0.05f;
+        indexPath = 0;
+        maxPath = 3;
+        path[0] = Point3d(0, 0, -10);
+        path[1] = Point3d(0, 0, 0);
+        path[2] = Point3d(5, 0, 5);
     }
 
     Point3d startDirection;
@@ -39,14 +48,17 @@ public:
 
     /* Getters
      */
-    Texture& getTexture() { return this->texture; }
+    Texture &getTexture() { return this->texture; }
+    Point3d &getDirection() { return this->direction; }
+    Point3d &getPosition() { return this->position; }
+    int orientationTest(Point3d, Point3d, Point3d);
 
     /* Setters
      */
     void setAnimate(bool animate) { this->animate = animate; }
     void setMove(bool move) { this->move = move; }
 
-private:
+  private:
     // whether to animate the bird (moving wings, tail, ...) or not
     bool animate;
 
@@ -71,6 +83,14 @@ private:
     // current position and direction the bird is facing
     Point3d direction;
     Point3d position;
+
+    // path
+    Point3d path[20];
+    int indexPath;
+    int maxPath;
+    GLfloat speed;
+    bool forwarding;
+    GLfloat radius;
 };
 
 #endif // BIRD_H
