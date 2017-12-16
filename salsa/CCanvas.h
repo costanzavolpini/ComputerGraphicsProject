@@ -70,7 +70,9 @@ class CCanvas : public QGLWidget {
 
     void setView(View _view);
 
-    void generateShadow();
+    void generateShadowMap();
+
+    void viewAndProjectMatrixShadow();
 
 
     /*

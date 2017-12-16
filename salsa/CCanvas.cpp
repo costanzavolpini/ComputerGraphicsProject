@@ -217,7 +217,7 @@ void CCanvas::setView(View _view) {
 * reference: http://www.sunandblackcat.com/tipFullView.php?l=eng&topicid=34 
 */
 
-void CCanvas::generateShadow(){
+void CCanvas::generateShadowMap(){
     // Rendering 1
     // size of the shadow map
     GLuint shadowMapSize = 1024;
@@ -263,6 +263,20 @@ void CCanvas::generateShadow(){
     glDrawBuffer(GL_NONE);
 }
 
+//-----------------------------------------------------------------------------
+/*
+ * Shadow Mapping for point light (sun)
+ * To calculate all shadows from point light source it's required to save information in shadow cube map for all space around the light source.
+ * To use cube map as shadow map it's required to render scene for six times into each face of cube texture.
+ * 
+ * reference: http://www.sunandblackcat.com/tipFullView.php?l=eng&topicid=36
+ */ 
+void CCanvas::viewAndProjectMatrixShadow(){
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, shadowMapSize, shadowMapSize, 
+    //         0, GL_RED, GL_FLOAT, nullptr);
+
+    //TODO understand how it works
+}
 
 //-----------------------------------------------------------------------------
 
@@ -363,7 +377,12 @@ void CCanvas::paintGL() {
     /*
      * Shadow Management
      */
-    generateShadow();
+    generateShadowMap();
+    viewAndProjectMatrixShadow(); //TODO : View and projection matrices for light source's point of vie
+
+    //TODO : Precision of the shadow map
+    //TODO : Rendering into the shadow map
+    //etc........
 
 
     /*
