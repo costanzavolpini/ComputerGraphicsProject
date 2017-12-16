@@ -23,6 +23,7 @@ HEADERS += ./Base.h \
            ./objloader.hpp \
            ./Bird.h \
            ./Scene.h \
+           ./Camera.h \
            ./Sky.h
 
 # Source files
@@ -34,6 +35,7 @@ SOURCES += ./CCanvas.cpp \
            ./objloader.cpp \
            ./Bird.cpp \
            ./Scene.cpp\
+           ./Camera.cpp\
            ./Sky.cpp
 
 # Forms

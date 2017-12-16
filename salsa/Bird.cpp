@@ -160,15 +160,15 @@ void Bird::inc() {
 
 void Bird::fly(GLfloat tau) {
     if (this->move) {
-
+        Point3d currPos = this->position;
         Point3d nextPos = flyPath(tau);
-        glTranslatef(nextPos.x(), nextPos.y(), nextPos.z());
+
+        glTranslatef(currPos.x(), currPos.y(), currPos.z());
 
         GLfloat scale = 0.2f;
         glScalef(scale, scale, scale);
 
-        direction = (nextPos - this->position).normalized();
-//        direction = Point3d(-1.0f, 0.0f, -1.0f);
+        direction = (nextPos - currPos).normalized();
 
         Point3d directionXZ = Point3d(direction.x(), 0.0f, direction.z());
         Point3d startDirectionXZ = Point3d(startDirection.x(), 0.0f, startDirection.z());
@@ -178,9 +178,7 @@ void Bird::fly(GLfloat tau) {
         yAngle = copysign(yAngle, sign);
         glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
 
-//        glRotatef(2.5*sin(tau) * 45.0f, 0.0f, -1.0f, 0.0f);
-
-        // save pos
+        // save position
         this->position = nextPos;
     }
 }

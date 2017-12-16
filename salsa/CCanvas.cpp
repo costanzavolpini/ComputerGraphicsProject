@@ -7,11 +7,11 @@ using namespace std;
 //-----------------------------------------------------------------------------
 
 void CCanvas::initializeGL() {
-    glClearColor(0.8117647059f, 0.8470588235f, 0.862745098f, 0.5f);              // black background
-    glClearDepth(1.0f);                                // depth buffer setup
-    glEnable(GL_DEPTH_TEST);                           // enables depth testing
-    glDepthFunc(GL_LEQUAL);                            // the type of depth testing to do
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // really nice perspective calculations
+    glClearColor(0.8117647059f, 0.8470588235f, 0.862745098f, 0.5f); // black background
+    glClearDepth(1.0f);                                             // depth buffer setup
+    glEnable(GL_DEPTH_TEST);                                        // enables depth testing
+    glDepthFunc(GL_LEQUAL);                                         // the type of depth testing to do
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);              // really nice perspective calculations
     glShadeModel(GL_SMOOTH);
 
     // One light source
@@ -30,9 +30,9 @@ void CCanvas::initializeGL() {
     GLfloat lightpos[] = {(float)sunPosition.x(), (float)sunPosition.y(), (float)sunPosition.z(), 0.0f};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
-//    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
-    GLfloat lightAmb[] = {1.0, 1.0, 1.0}; //TODO remove
-//    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
+    //    GLfloat lightAmb[] = {0.3, 0.3, 0.3};
+    GLfloat lightAmb[] = {1.0, 1.0, 1.0};  //TODO remove
+                                           //    GLfloat lightDiff[] = {0.4, 0.4, 0.4};
     GLfloat lightDiff[] = {1.0, 1.0, 1.0}; //TODO remove
     GLfloat lightSpec[] = {1.0, 1.0, 1.0};
 
@@ -51,7 +51,7 @@ void CCanvas::initializeGL() {
     sky.init();
 
     // Example for debugging
-//    example.init();
+    //    example.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -81,62 +81,6 @@ void CCanvas::glPerspective(const GLdouble fovy, const GLdouble aspect, const GL
     mat[13] = 0.0;
     mat[14] = 2.0 * zNear * zFar / delta;
     mat[15] = 0.0;
-
-    glMultMatrixd(mat);
-
-    delete[] mat;
-}
-
-void CCanvas::lookAt(const GLdouble eyex,
-                     const GLdouble eyey,
-                     const GLdouble eyez,
-                     const GLdouble centerx,
-                     const GLdouble centery,
-                     const GLdouble centerz,
-                     const GLdouble upx,
-                     const GLdouble upy,
-                     const GLdouble upz) {
-    GLdouble *mat = new GLdouble[16];
-
-    // TODO: add computation for the lookat here!
-    Point3d X, Y, Z;
-
-    // create new coordinate system
-    Z = Point3d(eyex - centerx, eyey - centery, eyez - centerz);
-    Z.normalize();
-
-    // compute Y and X
-    Y = Point3d(upx, upy, upz);
-    X = Y ^ Z;
-
-    // recompute X
-    Y = Z ^ X;
-
-    // normalize
-    X.normalize();
-    Y.normalize();
-
-    Point3d eye(eyex, eyey, eyez);
-
-    mat[0] = X.x();
-    mat[1] = X.y();
-    mat[2] = X.z();
-    mat[3] = -X * eye;
-
-    mat[4] = Y.x();
-    mat[5] = Y.y();
-    mat[6] = Y.z();
-    mat[7] = -Y * eye;
-
-    mat[8] = Z.x();
-    mat[9] = Z.y();
-    mat[10] = Z.z();
-    mat[11] = -Z * eye;
-
-    mat[12] = 0.0;
-    mat[13] = 0.0;
-    mat[14] = 0.0;
-    mat[15] = 1.0;
 
     glMultMatrixd(mat);
 
@@ -178,22 +122,6 @@ void CCanvas::resizeGL(int width, int height) {
 
 //-----------------------------------------------------------------------------
 
-void CCanvas::setView(View _view) {
-    switch (_view) {
-        case Side:
-            glTranslatef(1.0, -2.5, -10.0);
-            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
-            break;
-        case Eyes:
-            // Maybe you want to have an option to view the scene from the bird's eyes, up to you
-            break;
-        case Above:
-            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
-            glTranslatef(0.0, 2.5, -10.0);
-            break;
-    }
-}
-
 void CCanvas::paintGL() {
     // clear screen and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -205,14 +133,14 @@ void CCanvas::paintGL() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Setup the current view
-    setView(View::Side);
+    camera.setView(view, bird);
 
     // You can always change the light position here if you want
-//    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));
-//    GLfloat lightpos[] = {(float)newSunPos.x(), (float)newSunPos.y(), (float)newSunPos.z(), 0.0f};
+    //    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));
+    //    GLfloat lightpos[] = {(float)newSunPos.x(), (float)newSunPos.y(), (float)newSunPos.z(), 0.0f};
     glPushMatrix();
     GLfloat lightpos[] = {(float)sunPosition.x(), (float)sunPosition.y(), (float)sunPosition.z(), 0.0f};
-    glRotatef(sunSpeed*tau, 0, 1, 0);
+    glRotatef(sunSpeed * tau, 0, 1, 0);
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
     glPopMatrix();
 
@@ -221,45 +149,33 @@ void CCanvas::paintGL() {
     glDisable(GL_LIGHTING);
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_LINES);
-        glVertex3f(-3.0f, 0.0f, 0.0f);
-        glVertex3f(60.0f, 0.0f, 0.0f);
+    glVertex3f(-3.0f, 0.0f, 0.0f);
+    glVertex3f(60.0f, 0.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_LINES);
-        glVertex3f(0.0f, -3.0f, 0.0f);
-        glVertex3f(0.0f, 60.0f, 0.0f);
+    glVertex3f(0.0f, -3.0f, 0.0f);
+    glVertex3f(0.0f, 60.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
-        glVertex3f(0.0f, 0.0f, -3.0f);
-        glVertex3f(0.0f, 0.0f, 60.0f);
+    glVertex3f(0.0f, 0.0f, -3.0f);
+    glVertex3f(0.0f, 0.0f, 60.0f);
     glEnd();
     // vector to sun
-//    glColor3f(1.0f, 1.0f, 1.0f);
-//    glBegin(GL_LINES);
-//        glVertex3f(newSunPos.x()*100000, newSunPos.y()*100000, newSunPos.z()*100000);
-//        glVertex3f(0.0f, 0.0f, 0.0f);
-//    glEnd();
+    //    glColor3f(1.0f, 1.0f, 1.0f);
+    //    glBegin(GL_LINES);
+    //        glVertex3f(newSunPos.x()*100000, newSunPos.y()*100000, newSunPos.z()*100000);
+    //        glVertex3f(0.0f, 0.0f, 0.0f);
+    //    glEnd();
     glEnable(GL_LIGHTING);
 
     /**** Setup and draw your objects ****/
 
     // You can freely enable/disable some of the lights in the scene as you wish
     glEnable(GL_LIGHT0);
-//    glDisable(GL_LIGHT1);
+    //    glDisable(GL_LIGHT1);
     // Before drawing an object, you can set its material properties
-
-//    glColor3f(0.5f, 0.5f, 0.5f);
-//    GLfloat amb[]  = {0.1f, 0.1f, 0.1f};
-//    GLfloat diff[] = {0.7f, 0.7f, 0.7f};
-//    GLfloat spec[] = {0.1f, 0.1f, 0.1f};
-//    GLfloat shin = 0.0001;
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diff);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &shin);
-
-
     /*
      * Bind texture and push new matrix before drawing
      */
@@ -271,7 +187,6 @@ void CCanvas::paintGL() {
      *  GLfloat matrix[16];
      *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
     */
-
 
     /* Increment tau (for project main animation)
      */
@@ -288,7 +203,6 @@ void CCanvas::paintGL() {
     bird.inc();
     bird.draw();
 
-
     /*
      * Unbind texture and pop matrix
      * Remove the last transformation matrix from the stack - you have drawn your last
@@ -296,14 +210,6 @@ void CCanvas::paintGL() {
      */
     glPopMatrix();
     bird.getTexture().unbind();
-
-
-
-
-
-
-
-
 
     /*
      * Bind texture and push new matrix before drawing
@@ -322,13 +228,10 @@ void CCanvas::paintGL() {
     glTranslatef(-5.0f, -9.0f, -30.0f);
     glScalef(scale2, scale2, scale2);
 
-
     /*
      * Draw Scene
      */
     scene.draw();
-    
-
 
     /*
      * Unbind texture and pop matrix
@@ -343,4 +246,25 @@ void CCanvas::paintGL() {
     sky.draw(tau);
 
     sky.getTexture().unbind();
+}
+
+void CCanvas::keyPressEvent(QKeyEvent *event) {
+    switch (event->key()) {
+        case Qt::Key_W:
+        case Qt::Key_A:
+        case Qt::Key_S:
+        case Qt::Key_D:
+        case Qt::Key_Space:
+        case Qt::Key_Z:
+        case Qt::Key_J:
+        case Qt::Key_L:
+        case Qt::Key_I:
+        case Qt::Key_K:
+            camera.keyPressEvent(event, view);
+            break;
+
+        case Qt::Key_Control:
+            view = camera.getNextView(view);
+            break;
+    }
 }
