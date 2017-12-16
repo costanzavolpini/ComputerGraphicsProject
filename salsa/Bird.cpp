@@ -189,9 +189,9 @@ int Bird::orientationTest(Point3d a, Point3d mid, Point3d b) {
     // positive: left
     // negative: right
     double cross = (mid.x() - a.x()) * (b.z() - a.z()) - (mid.z() - a.z()) * (b.x() - a.x());
-    if (cross < -0.1) return -1; // right
-    if (cross > 0.1) return 1;   // left
-    return 0;                    // collinear
+    if (cross < -0.001) return -1; // right
+    if (cross > 0.001) return 1;   // left
+    return 0;                      // collinear
 }
 
 /*
@@ -208,25 +208,32 @@ Point3d Bird::flyPath(GLfloat tau) {
     Point3d nextPosition;
 
     if (forwarding) {
+        // orientation test
         double orientation = orientationTest(position, position + direction, nextPath);
 
         if (orientation == 0) {
-            // check if with the next point
+            // go streight
+
+            // calculate next point
             nextPosition += position + direction * speed;
 
             if (((nextPath.x() <= nextPosition.x() && nextPath.x() >= position.x()) || (nextPath.x() >= nextPosition.x() && nextPath.x() <= position.x())) &&
                 ((nextPath.z() <= nextPosition.z() && nextPath.z() >= position.z()) || (nextPath.z() >= nextPosition.z() && nextPath.z() <= position.z()))) {
-                // check  if it is going to overtake
+                // check if next point overtake the nextPath
+                // if so, select a new path
                 indexPath = (indexPath + 1) % maxPath;
             }
 
         } else {
+            // the points are not colinear
             forwarding = false;
+            // may add random radius
             radius = 4;
         }
     }
 
     if (!forwarding) {
+        // turn
         direction = (nextPath - position).normalized();
         nextPosition += position + direction * speed;
         forwarding = true;
