@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "__tree": "cpp",
+        "algorithm": "cpp",
+        "__bit_reference": "cpp",
+        "__split_buffer": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "initializer_list": "cpp",
+        "iterator": "cpp",
+        "memory": "cpp",
+        "queue": "cpp",
+        "set": "cpp",
+        "string": "cpp",
+        "vector": "cpp"
+    }
+}
