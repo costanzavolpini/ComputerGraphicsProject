@@ -40,6 +40,8 @@ public:
     /* Getters
      */
     Texture& getTexture() { return this->texture; }
+    Point3d& getDirection() { return this->direction; }
+    Point3d& getPosition() { return this->position; }
 
     /* Setters
      */
