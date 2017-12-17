@@ -240,7 +240,7 @@ void CCanvas::paintGL() {
      * Shadow Management:
      * generate shadow map (preprocessing step)
      */
-    generateShadowMap();
+//    generateShadowMap();
 //    viewAndProjectMatrixShadow(); //TODO : View and projection matrices for light source's point of view
 
     //TODO : Precision of the shadow map
