@@ -174,9 +174,27 @@ void Bird::fly(GLfloat tau) {
         Point3d startDirectionXZ = Point3d(startDirection.x(), 0.0f, startDirection.z());
         GLfloat yAngle = startDirectionXZ.getAngle(directionXZ) * 180 / PI;
 
+        Point3d directionYZ = Point3d(0.0f, direction.y(), direction.z());
+        Point3d startDirectionYZ = Point3d(0.0f, startDirection.y(), startDirection.z());
+        GLfloat xAngle = startDirectionYZ.getAngle(directionYZ) * 180 / PI;
+
+        Point3d directionXY = Point3d(direction.x(), direction.y(), 0.0f);
+        Point3d startDirectionXY = Point3d(direction.x(), startDirection.y(), 0.0f);
+        GLfloat zAngle = startDirectionXY.getAngle(directionXY) * 180 / PI;
+
+
         GLfloat sign = (startDirectionXZ ^ directionXZ).y();
         yAngle = copysign(yAngle, sign);
+
+        sign = (startDirectionYZ ^ directionYZ).x();
+        xAngle = copysign(xAngle, sign);
+
+        sign = (startDirectionXY ^ directionXY).z();
+        zAngle = copysign(zAngle, sign);
+
+        glRotatef(xAngle, 1.0f, 0.0f, 0.0f);
         glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
+//        glRotatef(zAngle, 0.0f, 0.0f, 1.0f);
 
         // save position
         this->position = nextPos;
@@ -242,7 +260,7 @@ int Bird::orientationTest(Point3d a, Point3d mid, Point3d b) {
 //}
 
 Point3d Bird::flyPath(GLfloat tau) {
-    float xcr, zcr;   //Points on the Catmull-Rom spline
+    float xcr, ycr, zcr;   //Points on the Catmull-Rom spline
 
     if(pathT == 0) indexPath = (indexPath + 1) % maxPath;
 
@@ -263,13 +281,16 @@ Point3d Bird::flyPath(GLfloat tau) {
     xcr = p2.x() + 0.5*t*(-p1.x()+p3.x())
             + t*t*(p1.x() - 2.5*p2.x() + 2*p3.x() - 0.5*p4.x())
             + t*t*t*(-0.5*p1.x() + 1.5*p2.x() - 1.5*p3.x() + 0.5*p4.x());
+    ycr = p2.y() + 0.5*t*(-p1.y()+p3.y())
+               + t*t*(p1.y() - 2.5*p2.y() + 2*p3.y() - 0.5*p4.y())
+               + t*t*t*(-0.5*p1.y() + 1.5*p2.y() - 1.5*p3.y() + 0.5*p4.y());
     zcr = p2.z() + 0.5*t*(-p1.z()+p3.z())
             + t*t*(p1.z() - 2.5*p2.z() + 2*p3.z() - 0.5*p4.z())
             + t*t*t*(-0.5*p1.z() + 1.5*p2.z() - 1.5*p3.z() + 0.5*p4.z());
 
 
     pathT = (pathT + 1) % speed;
-    return Point3d(xcr, 0, zcr);
+    return Point3d(xcr, ycr, zcr);
 }
 
 /*

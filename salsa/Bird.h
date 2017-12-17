@@ -29,11 +29,12 @@ class Bird {
         /* PATH VARIABLES */
         indexPath = 0;
         maxPath = 5;
-        path[0] = Point3d(0, 0, -80);
-        path[1] = Point3d(2, 0, -30);
-        path[2] = Point3d(0, 0, 0);
-        path[3] = Point3d(-5, 0, 8);
-        path[4] = Point3d(20, 0, 9);
+        path[0] = Point3d(0, 20, -80);
+        path[1] = Point3d(2, 10, -40);
+        path[2] = Point3d(2, 60, -20);
+        path[3] = Point3d(0, 0, 0);
+        path[4] = Point3d(-5, 0, 8);
+        path[5] = Point3d(20, 0, 9);
 
         pathT = 0;
 
