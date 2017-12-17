@@ -26,13 +26,17 @@ class Bird {
 
         startDirection = Point3d(0.0f, 0.0f, 1.0f);
 
-        forwarding = true;
-        speed = 0.05f;
+        /* PATH VARIABLES */
         indexPath = 0;
-        maxPath = 3;
-        path[0] = Point3d(0, 0, -10);
-        path[1] = Point3d(0, 0, 0);
-        path[2] = Point3d(5, 0, 5);
+        maxPath = 5;
+        path[0] = Point3d(0, 0, -80);
+        path[1] = Point3d(2, 0, -30);
+        path[2] = Point3d(0, 0, 0);
+        path[3] = Point3d(-5, 0, 8);
+        path[4] = Point3d(20, 0, 9);
+
+        pathT = 0;
+
     }
 
     Point3d startDirection;
@@ -88,9 +92,8 @@ class Bird {
     Point3d path[20];
     int indexPath;
     int maxPath;
-    GLfloat speed;
-    bool forwarding;
-    GLfloat radius;
+    int speed;
+    int pathT;
 };
 
 #endif // BIRD_H
