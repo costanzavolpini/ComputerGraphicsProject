@@ -24,7 +24,8 @@ HEADERS += ./Base.h \
            ./Bird.h \
            ./Scene.h \
            ./Camera.h \
-           ./Sky.h
+           ./Sky.h \
+    Clouds.h
 
 # Source files
 SOURCES += ./CCanvas.cpp \
@@ -36,7 +37,8 @@ SOURCES += ./CCanvas.cpp \
            ./Bird.cpp \
            ./Scene.cpp\
            ./Camera.cpp\
-           ./Sky.cpp
+           ./Sky.cpp \
+    Clouds.cpp
 
 # Forms
 FORMS += ./GLRender.ui
