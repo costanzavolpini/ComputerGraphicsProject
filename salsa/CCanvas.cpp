@@ -134,59 +134,6 @@ void CCanvas::resizeGL(int width, int height) {
 
 //-----------------------------------------------------------------------------
 
-/**
-* Rendering 1. Create shadowMap (it contains the depth of each element that is visible from the light source (sun))
-* Rendering 2. View from camera's point of view. shadowFramebuffer contains standard projection of vertices into screen space.
-* Vertex-shader contains each vertex that should be projected into space.
-* Fragment-shader can access to shadowMap, it contains position of vertex in light source's space.
-* Using screen space position of fragment, check: 
-* If distance from shadowMap < distance current fragment to light source, then current fragment is in shadow.
-* 
-* reference: http://www.sunandblackcat.com/tipFullView.php?l=eng&topicid=34 
-*/
-
-void CCanvas::generateShadowMap(){
-    // The framebuffer, which regroups 0, 1, or more textures, and 0 or 1 depth buffer.
-     GLuint FramebufferName = 0;
-     glGenFramebuffers(1, &FramebufferName);
-     glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
-
-     // Depth texture. Slower than a depth buffer, but you can sample it later in your shader
-     GLuint depthTexture;
-     glGenTextures(1, &depthTexture);
-     glBindTexture(GL_TEXTURE_2D, depthTexture);
-     glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT16, 1024, 1024, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture, 0);
-
-     glDrawBuffer(GL_NONE); // No color buffer is drawn to.
-
-     // Always check that our framebuffer is ok
-//     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-//     return false;
-}
-
-//-----------------------------------------------------------------------------
-/*
- * Shadow Mapping for point light (sun)
- * To calculate all shadows from point light source it's required to save information in shadow cube map for all space around the light source.
- * To use cube map as shadow map it's required to render scene for six times into each face of cube texture.
- * 
- * reference: http://www.sunandblackcat.com/tipFullView.php?l=eng&topicid=36
- */ 
-void CCanvas::viewAndProjectMatrixShadow(){
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, shadowMapSize, shadowMapSize, 
-    //         0, GL_RED, GL_FLOAT, nullptr);
-
-    //TODO understand how it works
-}
-
-//-----------------------------------------------------------------------------
-
 void CCanvas::paintGL() {
     // clear screen and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -233,19 +180,6 @@ void CCanvas::paintGL() {
     //        glVertex3f(0.0f, 0.0f, 0.0f);
     //    glEnd();
     glEnable(GL_LIGHTING);
-
-
-
-    /*
-     * Shadow Management:
-     * generate shadow map (preprocessing step)
-     */
-//    generateShadowMap();
-//    viewAndProjectMatrixShadow(); //TODO : View and projection matrices for light source's point of view
-
-    //TODO : Precision of the shadow map
-    //TODO : Rendering into the shadow map
-    //etc........
 
 
 
