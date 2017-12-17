@@ -5,15 +5,15 @@
  */
 Clouds::Clouds() {
     std::vector<Point3d> positions;
-    positions.push_back(Point3d(1, 1, 1));
-    positions.push_back(Point3d(1, 2, 1));
-    positions.push_back(Point3d(1, 3, 1));
-    positions.push_back(Point3d(1, 4, 1));
+    positions.push_back(Point3d(0.0f, 1.0f, -5.0f));
+    positions.push_back(Point3d(0.0f, 2.0f,  5.0f));
+    positions.push_back(Point3d(0.0f, 3.0f, -5.0f));
+    positions.push_back(Point3d(0.0f, 4.0f,  5.0f));
     std::vector<Point3d> colors;
-    colors.push_back(Point3d(0, 0, 0));
-    colors.push_back(Point3d(0, 0, 0));
-    colors.push_back(Point3d(0, 0, 0));
-    colors.push_back(Point3d(0, 0, 0));
+    colors.push_back(Point3d(0.0f, 0.0f, 0.0f));
+    colors.push_back(Point3d(0.0f, 0.0f, 0.0f));
+    colors.push_back(Point3d(0.0f, 0.0f, 0.0f));
+    colors.push_back(Point3d(0.0f, 0.0f, 0.0f));
     vecPoint3dToFloat(positions, particlePositions);
     vecPoint3dToFloat(colors, particleColors);
     std::cout << "Created clouds" << std::endl;
@@ -27,11 +27,17 @@ void Clouds::init() {
 //      0.005f,  0.005f, 0.000f,
 //    };
     static const GLfloat g_vertex_buffer_data[] = {
-     -500.0,  -500.0f,  0.0f,
-      500.0f, -500.0f,  0.0f,
-     -500.0f,  500.0f,  0.0f,
-      500.0f,  500.0f,  0.0f,
+     -50.0,  -50.0f,  0.0f,
+      50.0f, -50.0f,  0.0f,
+     -50.0f,  50.0f,  0.0f,
+      50.0f,  50.0f,  0.0f,
     };
+//    static const GLfloat g_vertex_buffer_data[] = {
+//        -0.5f, -0.5f,  0.0f,
+//         0.5f, -0.5f,  0.0f,
+//        -0.5f,  0.5f,  0.0f,
+//         0.5f,  0.5f,  0.0f,
+//    };
     glGenBuffers(1, &billboard_vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, billboard_vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), &g_vertex_buffer_data[0], GL_STATIC_DRAW);
@@ -40,13 +46,13 @@ void Clouds::init() {
     glGenBuffers(1, &particles_position_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
     // Initialize with empty (NULL) buffer : it will be updated later, each frame.
-    glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, maxParticles * 3 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 
     // The VBO containing the colors of the particles
     glGenBuffers(1, &particles_color_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, particles_color_buffer);
     // Initialize with empty (NULL) buffer : it will be updated later, each frame.
-    glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, maxParticles * 3 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
 }
 
 void Clouds::inc(GLfloat tau) {
@@ -54,20 +60,58 @@ void Clouds::inc(GLfloat tau) {
 }
 
 void Clouds::draw() {
-    glDisable(GL_LIGHTING);
+//    glDisable(GL_LIGHTING);
     // Update the buffers that OpenGL uses for rendering.
     // There are much more sophisticated means to stream data from the CPU to the GPU,
     // but this is outside the scope of this tutorial.
     // http://www.opengl.org/wiki/Buffer_Object_Streaming
 
     glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
-    glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-    glBufferSubData(GL_ARRAY_BUFFER, 0, particlesCount * sizeof(GLfloat) * 4, &particlePositions[0]);
-//    (GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid *data);
+    glBufferData(GL_ARRAY_BUFFER, maxParticles * 3 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+    glBufferSubData(GL_ARRAY_BUFFER, 0, particlesCount * sizeof(GLfloat) * 3, &particlePositions[0]);
 
     glBindBuffer(GL_ARRAY_BUFFER, particles_color_buffer);
-    glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-    glBufferSubData(GL_ARRAY_BUFFER, 0, particlesCount * sizeof(GLubyte) * 4, &particleColors[0]);
+    glBufferData(GL_ARRAY_BUFFER, maxParticles * 3 * sizeof(GLubyte), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
+    glBufferSubData(GL_ARRAY_BUFFER, 0, particlesCount * sizeof(GLubyte) * 3, &particleColors[0]);
+
+
+
+    // 1rst attribute buffer : vertices
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, billboard_vertex_buffer);
+    glVertexAttribPointer(
+     0, // attribute. No particular reason for 0, but must match the layout in the shader.
+     3, // size
+     GL_FLOAT, // type
+     GL_FALSE, // normalized?
+     0, // stride
+     (void*)0 // array buffer offset
+    );
+
+    // 2nd attribute buffer : positions of particles' centers
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, particles_position_buffer);
+    glVertexAttribPointer(
+     1, // attribute. No particular reason for 1, but must match the layout in the shader.
+     3, // size : x + y + z => 3
+     GL_FLOAT, // type
+     GL_FALSE, // normalized?
+     0, // stride
+     (void*)0 // array buffer offset
+    );
+
+    // 3rd attribute buffer : particles' colors
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, particles_color_buffer);
+    glVertexAttribPointer(
+     2, // attribute. No particular reason for 1, but must match the layout in the shader.
+     3, // size : r + g + b => 3
+     GL_UNSIGNED_BYTE, // type
+     GL_TRUE, // normalized? *** YES, this means that the unsigned char[4] will be accessible with a vec4 (floats) in the shader ***
+     0, // stride
+     (void*)0 // array buffer offset
+    );
+
 
 
     // These functions are specific to glDrawArrays*Instanced*.
@@ -84,7 +128,13 @@ void Clouds::draw() {
     // for(i in ParticlesCount) : glDrawArrays(GL_TRIANGLE_STRIP, 0, 4),
     // but faster.
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particlesCount);
-    glEnable(GL_LIGHTING);
+
+//    glColor3f(1.0f, 0.0f, 1.0f);
+//    glBegin(GL_LINES);
+//    glVertex3f(-1.0f, -1.0f, -1.0f);
+//    glVertex3f(1.0f, 1.0f, 1.0f);
+//    glEnd();
+//    glEnable(GL_LIGHTING);
 }
 
 void Clouds::vecPoint3dToFloat(std::vector<Point3d> &_vec, std::vector<GLfloat> &_out) {

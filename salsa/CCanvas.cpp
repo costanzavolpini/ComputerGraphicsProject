@@ -212,7 +212,7 @@ void CCanvas::paintGL() {
      */
     scene.getTexture().bind();
     glPushMatrix();
-    scene.draw();
+//    scene.draw();
     glPopMatrix();
     scene.getTexture().unbind();
 
@@ -223,7 +223,7 @@ void CCanvas::paintGL() {
      */
     sky.getTexture().bind();
     glPushMatrix();
-    sky.draw(tau);
+//    sky.draw(tau);
     glPopMatrix();
     sky.getTexture().unbind();
 
