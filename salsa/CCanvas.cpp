@@ -59,9 +59,7 @@ void CCanvas::initializeGL() {
     bird.setMove(true);
     scene.init();
     sky.init();
-
-    // Example for debugging
-    //    example.init();
+    clouds.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -145,6 +143,17 @@ void CCanvas::paintGL() {
 
 
 
+    /*
+     * Setup the current view, increment animation tau
+     */
+    camera.setView(view, bird);
+    tau += tauIncrement;
+
+
+
+    /*
+     * Change light position to follow the sun
+     */
     // You can always change the light position here if you want
     //    Point3d newSunPos(sunPosition.x() * sin(10*tau), sunPosition.y(), sunPosition.z() * cos(10*tau));
     //    GLfloat lightpos[] = {(float)newSunPos.x(), (float)newSunPos.y(), (float)newSunPos.z(), 0.0f};
@@ -156,7 +165,9 @@ void CCanvas::paintGL() {
 
 
 
-    /*** Draw Axes in the global coordinate system ***/
+    /*
+     * Draw Axes in the global coordinate system
+     */
     glDisable(GL_LIGHTING);
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_LINES);
@@ -166,7 +177,7 @@ void CCanvas::paintGL() {
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_LINES);
     glVertex3f(0.0f, -3.0f, 0.0f);
-    glVertex3f(0.0f, 60.0f, 0.0f);
+    glVertex3f(0.0f, 460.0f, 0.0f);
     glEnd();
     glColor3f(0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
@@ -184,84 +195,47 @@ void CCanvas::paintGL() {
 
 
     /*
-     * Setup the current view
-     */
-    camera.setView(view, bird);
-
-
-
-    /*
-     * Bind texture and push new matrix before drawing
+     * Draw Bird
      */
     bird.getTexture().bind();
     glPushMatrix();
-
-    /*
-     * Obtaining the values of the current modelview matrix
-     *  GLfloat matrix[16];
-     *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
-    */
-
-    /* Increment tau (for project main animation)
-     */
-    tau += tauIncrement;
-
-    /*
-     * Update flight path of the bird
-     */
     bird.fly(tau);
-
-    /*
-     * Draw Bird
-     */
     bird.inc();
     bird.draw();
-
-    /*
-     * Unbind texture and pop matrix
-     * Remove the last transformation matrix from the stack - you have drawn your last
-     * object with a new transformation and now you go back to the previous one
-     */
     glPopMatrix();
     bird.getTexture().unbind();
 
 
 
     /*
-     * Bind texture and push new matrix before drawing
+     * Draw Scene
      */
     scene.getTexture().bind();
     glPushMatrix();
-
-    /*
-     * Obtaining the values of the current modelview matrix
-     *  GLfloat matrix[16];
-     *  glGetFloatv (GL_MODELVIEW_MATRIX, matrix);
-    */
-
-    GLfloat scale2 = 1.0f;
-    glRotatef(0.0f, 0.0f, 0.0f, 0.0f);
-    glTranslatef(-5.0f, -9.0f, -30.0f);
-    glScalef(scale2, scale2, scale2);
-
-    /*
-     * Draw Scene
-     */
     scene.draw();
-
-    /*
-     * Unbind texture and pop matrix
-     * Remove the last transformation matrix from the stack - you have drawn your last
-     * object with a new transformation and now you go back to the previous one
-     */
     glPopMatrix();
     scene.getTexture().unbind();
 
+
+
+    /*
+     * Draw Sky
+     */
     sky.getTexture().bind();
-
+    glPushMatrix();
     sky.draw(tau);
-
+    glPopMatrix();
     sky.getTexture().unbind();
+
+
+
+    /*
+     * Draw Clouds
+     */
+    glPushMatrix();
+    clouds.inc(tau);
+    clouds.draw();
+    glPopMatrix();
 }
 
 void CCanvas::keyPressEvent(QKeyEvent *event) {

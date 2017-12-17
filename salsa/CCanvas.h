@@ -18,6 +18,7 @@ using namespace std;
 #include "Camera.h"
 #include "Scene.h"
 #include "Sky.h"
+#include "Clouds.h"
 
 
 /************************************************************************/
@@ -30,7 +31,8 @@ class CCanvas : public QGLWidget {
     explicit CCanvas(QWidget *parent = 0) : QGLWidget(parent),
                                             bird(),
                                             scene(),
-                                            sky() {
+                                            sky(),
+                                            clouds() {
 
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
@@ -72,8 +74,9 @@ class CCanvas : public QGLWidget {
     // Scene object
     Scene scene;
 
-    //Sky object
+    // Sky object and clouds
     Sky sky;
+    Clouds clouds;
 
     Point3d sunPosition;
 
