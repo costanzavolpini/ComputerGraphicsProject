@@ -37,7 +37,8 @@ class Bird {
     void inc();
     void fly(GLfloat tau);
     Point3d flyPath(GLfloat tau);
-
+    float catmull_interp(float t, float c1, float c2, float c3, float c4);
+    Point3d catmull_point(float t, Point3d p1,  Point3d p2,  Point3d p3,  Point3d p4);
     /* Getters
      */
     Texture &getTexture() { return this->texture; }
