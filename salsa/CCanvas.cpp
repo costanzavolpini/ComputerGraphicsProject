@@ -17,6 +17,8 @@ using namespace std;
 //-----------------------------------------------------------------------------
 
 void CCanvas::initializeGL() {
+    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+
     glClearColor(0.8117647059f, 0.8470588235f, 0.862745098f, 0.5f); // black background
     glClearDepth(1.0f);                                             // depth buffer setup
     glEnable(GL_DEPTH_TEST);                                        // enables depth testing
