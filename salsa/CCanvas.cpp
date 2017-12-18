@@ -186,6 +186,8 @@ void CCanvas::paintGL() {
      * Update fog distance according to tau
      */
     glFogf(GL_FOG_END, 120.0f + 40.0f * (1+sin(tau/10)));             // Fog End Depth
+    // glFogf(GL_FOG_END, 80.0f);             // Fog End Depth
+
 
 
 
@@ -217,7 +219,6 @@ void CCanvas::paintGL() {
     glEnable(GL_LIGHTING);
 
 
-
     /*
      * Draw Clouds
      */
@@ -225,6 +226,9 @@ void CCanvas::paintGL() {
     clouds.inc(tau);
     clouds.draw();
     glPopMatrix();
+
+    //enable fog
+    glEnable(GL_FOG);
 
     /*
      * Draw Sky
@@ -235,11 +239,8 @@ void CCanvas::paintGL() {
     glPopMatrix();
     sky.getTexture().unbind();
 
-
-
-    // enable fog after drawing sky
-    glEnable(GL_FOG);
-
+    //disable fog
+    glDisable(GL_FOG);
 
 
     /*
@@ -253,7 +254,8 @@ void CCanvas::paintGL() {
     glPopMatrix();
     bird.getTexture().unbind();
 
-
+    //enable fog
+    glEnable(GL_FOG);
 
     /*
      * Draw Scene
@@ -267,7 +269,7 @@ void CCanvas::paintGL() {
 
 
     // disable fog at the end
-    glEnable(GL_FOG);
+    glDisable(GL_FOG);
 }
 
 void CCanvas::keyPressEvent(QKeyEvent *event) {
