@@ -52,6 +52,21 @@ void CCanvas::initializeGL() {
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
 
+
+
+    /*
+     * Setup fog
+     */
+    GLfloat fogColor[4] = { 0.75f, 0.85f, 0.85f, 1.0f };
+
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogfv(GL_FOG_COLOR, fogColor);
+    glFogf(GL_FOG_START, 2.0f);             // Fog Start Depth
+    // set in paintGL, dynamic
+//    glFogf(GL_FOG_END, 120.0f);             // Fog End Depth
+
+
+
     /*
      * Before you can use the texture you need to initialize it by calling the setTexture() method.
      * Before you can use OBJ/PLY model, you need to initialize it by calling init() method.
@@ -168,6 +183,13 @@ void CCanvas::paintGL() {
 
 
     /*
+     * Update fog distance according to tau
+     */
+    glFogf(GL_FOG_END, 120.0f + 40.0f * (1+sin(tau/10)));             // Fog End Depth
+
+
+
+    /*
      * Draw Axes in the global coordinate system
      */
     glDisable(GL_LIGHTING);
@@ -197,6 +219,30 @@ void CCanvas::paintGL() {
 
 
     /*
+     * Draw Clouds
+     */
+    glPushMatrix();
+    clouds.inc(tau);
+    clouds.draw();
+    glPopMatrix();
+
+    /*
+     * Draw Sky
+     */
+    sky.getTexture().bind();
+    glPushMatrix();
+    sky.draw(tau);
+    glPopMatrix();
+    sky.getTexture().unbind();
+
+
+
+    // enable fog after drawing sky
+    glEnable(GL_FOG);
+
+
+
+    /*
      * Draw Bird
      */
     bird.getTexture().bind();
@@ -214,30 +260,14 @@ void CCanvas::paintGL() {
      */
     scene.getTexture().bind();
     glPushMatrix();
-//    scene.draw();
+    scene.draw();
     glPopMatrix();
     scene.getTexture().unbind();
 
 
 
-    /*
-     * Draw Sky
-     */
-    sky.getTexture().bind();
-    glPushMatrix();
-//    sky.draw(tau);
-    glPopMatrix();
-    sky.getTexture().unbind();
-
-
-
-    /*
-     * Draw Clouds
-     */
-    glPushMatrix();
-    clouds.inc(tau);
-    clouds.draw();
-    glPopMatrix();
+    // disable fog at the end
+    glEnable(GL_FOG);
 }
 
 void CCanvas::keyPressEvent(QKeyEvent *event) {

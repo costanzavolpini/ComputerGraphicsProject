@@ -26,6 +26,6 @@ void Sky::draw(GLfloat tau) {
 
     glRotatef(CCanvas::sunSpeed*tau, 0, 1, 0);
     atmosphere.draw();
-    glPopAttrib();
     glPopMatrix();
+    glPopAttrib();
 }
