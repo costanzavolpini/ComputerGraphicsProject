@@ -59,11 +59,12 @@ void CCanvas::initializeGL() {
      */
     GLfloat fogColor[4] = { 0.75f, 0.85f, 0.85f, 1.0f };
 
-    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogi(GL_FOG_MODE, GL_EXP2);
+    glFogf (GL_FOG_DENSITY, 0.01f);
+
+    
+    glHint (GL_FOG_HINT, GL_NICEST);
     glFogfv(GL_FOG_COLOR, fogColor);
-    glFogf(GL_FOG_START, 2.0f);             // Fog Start Depth
-    // set in paintGL, dynamic
-//    glFogf(GL_FOG_END, 120.0f);             // Fog End Depth
 
 
 
@@ -185,11 +186,10 @@ void CCanvas::paintGL() {
     /*
      * Update fog distance according to tau
      */
-    glFogf(GL_FOG_END, 120.0f + 40.0f * (1+sin(tau/10)));             // Fog End Depth
-    // glFogf(GL_FOG_END, 80.0f);             // Fog End Depth
+    float val = fabs(cos(tau/2)) / 100;
+    glFogf (GL_FOG_DENSITY, val);
 
-
-
+    
 
     /*
      * Draw Axes in the global coordinate system
