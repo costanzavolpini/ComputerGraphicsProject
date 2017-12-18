@@ -332,7 +332,10 @@ Point3d Bird::flyPath(GLfloat tau) {
      * If we just changed pair of points, compute new speed between them
      */
     if (pathT == 0) {
-       float distance = (p3 - p2).norm();
+       Point3d p2_25 = catmull_point(0.25, p1, p2, p3, p4);
+       Point3d p2_5 = catmull_point(0.5, p1, p2, p3, p4);
+       Point3d p2_75 = catmull_point(0.75, p1, p2, p3, p4);
+       float distance = (p3 - p2_75).norm() + (p2_75 - p2_5).norm() + (p2_5 - p2_25).norm() + (p2_25 - p2).norm();
        std::cout << "Current: " << p2;
        speed = ceil(distance * 15);
        // std::cout << speed << ' ' << distance << std::endl;
@@ -342,17 +345,21 @@ Point3d Bird::flyPath(GLfloat tau) {
      * Do interpolation
      */
     float t = (float)pathT / (float)speed;  //Interpolation parameter
-    xcr = p2.x() + 0.5*t*(-p1.x()+p3.x())
-            + t*t*(p1.x() - 2.5*p2.x() + 2*p3.x() - 0.5*p4.x())
-            + t*t*t*(-0.5*p1.x() + 1.5*p2.x() - 1.5*p3.x() + 0.5*p4.x());
-    ycr = p2.y() + 0.5*t*(-p1.y()+p3.y())
-               + t*t*(p1.y() - 2.5*p2.y() + 2*p3.y() - 0.5*p4.y())
-               + t*t*t*(-0.5*p1.y() + 1.5*p2.y() - 1.5*p3.y() + 0.5*p4.y());
-    zcr = p2.z() + 0.5*t*(-p1.z()+p3.z())
-            + t*t*(p1.z() - 2.5*p2.z() + 2*p3.z() - 0.5*p4.z())
-            + t*t*t*(-0.5*p1.z() + 1.5*p2.z() - 1.5*p3.z() + 0.5*p4.z());
+    xcr = catmull_interp(t, p1.x(), p2.x(), p3.x(), p4.x());
+    ycr = catmull_interp(t, p1.y(), p2.y(), p3.y(), p4.y());
+    zcr = catmull_interp(t, p1.z(), p2.z(), p3.z(), p4.z());
 
     // Increment step between current pair of points, return current point between pair
     pathT = (pathT + 1) % speed;
     return Point3d(xcr, ycr, zcr);
+}
+
+float Bird::catmull_interp(float t, float c1, float c2, float c3, float c4) {
+    return c2 + 0.5*t*(-c1 + c3) + t * t * (c1 - 2.5 * c2 + 2 * c3 - 0.5 * c4)
+            + t * t * t * (-0.5 * c1 + 1.5 * c2 - 1.5 * c3 + 0.5 * c4);
+}
+
+Point3d Bird::catmull_point(float t, Point3d p1,  Point3d p2,  Point3d p3,  Point3d p4) {
+    return Point3d(catmull_interp(t, p1.x(), p2.x(), p3.x(), p4.x()), catmull_interp(t, p1.y(), p2.y(), p3.y(), p4.y()),
+                   catmull_interp(t, p1.z(), p2.z(), p3.z(), p4.z()));
 }
