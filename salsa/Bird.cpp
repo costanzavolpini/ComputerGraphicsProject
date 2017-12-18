@@ -26,13 +26,31 @@ void Bird::init() {
     path.push_back(Point3d(0, 0, 0));
 
     //  Points on path
+    // ATTENTION: TWO SAME VERTICES IN A ROW CRASH THE APP //
     path.push_back(Point3d( -10,   0,  10 ));
     path.push_back(Point3d( -20,   0,   5 ));
     path.push_back(Point3d( -25,   0,  -5 ));
-    path.push_back(Point3d( -30,   0,  10 ));
-    path.push_back(Point3d( -35,   0,   0 ));
-    path.push_back(Point3d( -35,   0, -15 ));
-    path.push_back(Point3d( -25,   0, -20 ));
+    path.push_back(Point3d( -30,   0,   0 ));
+    path.push_back(Point3d( -35,   0,   5 ));
+    path.push_back(Point3d( -40,   0,  -5 ));
+    path.push_back(Point3d( -45,   0, -10 ));
+    path.push_back(Point3d( -45,   0, -15 ));
+    path.push_back(Point3d( -40,   0, -20 ));
+    path.push_back(Point3d( -30,   0, -25 ));
+    path.push_back(Point3d( -20,   0, -20 ));
+    path.push_back(Point3d( -10,   0, -25 ));
+    path.push_back(Point3d(  -7,   0, -30 ));
+    path.push_back(Point3d(  -5,   0, -35 ));
+    path.push_back(Point3d(  -2,   0, -45 ));
+    path.push_back(Point3d(   0,   0, -50 ));
+    path.push_back(Point3d(   5,   1, -55 ));
+    path.push_back(Point3d(  10,   3, -60 ));
+    path.push_back(Point3d(  15,   5, -70 ));
+    path.push_back(Point3d(  20,   7, -72 ));
+    path.push_back(Point3d(  22,   9, -75 ));
+    path.push_back(Point3d(  25,  10, -75 ));
+    path.push_back(Point3d(  27,  10, -75 ));
+    path.push_back(Point3d(  30,  10, -70 ));
 
     // Variables and constants
     indexPath = 0;
