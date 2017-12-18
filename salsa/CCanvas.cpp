@@ -147,6 +147,7 @@ void CCanvas::paintGL() {
     /*** Draw Axes in the global coordinate system ***/
 
     glDisable(GL_LIGHTING);
+    glLineWidth(1.0f);
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_LINES);
     glVertex3f(-3.0f, 0.0f, 0.0f);

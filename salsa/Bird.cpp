@@ -16,6 +16,32 @@ void Bird::init() {
 
     psi = 0.0f;
     direction = startDirection;
+
+    /*
+     * Setup path
+     */
+    path.reserve(100);
+
+    // Start point (origin)
+    path.push_back(Point3d(0, 0, 0));
+
+    //  Points on path
+    path.push_back(Point3d( -10,   0,  10 ));
+    path.push_back(Point3d( -20,   0,   5 ));
+    path.push_back(Point3d( -25,   0,  -5 ));
+    path.push_back(Point3d( -30,   0,  10 ));
+    path.push_back(Point3d( -35,   0,   0 ));
+    path.push_back(Point3d( -35,   0, -15 ));
+    path.push_back(Point3d( -25,   0, -20 ));
+
+    // Variables and constants
+    indexPath = 0;
+    pathT = 0;
+    pathLength = path.size();
+
+    /*
+     * Get first position
+     */
     position = flyPath(0.0f);
 }
 
@@ -177,6 +203,7 @@ void Bird::fly(GLfloat tau) {
         Point3d directionYZ = Point3d(0.0f, direction.y(), direction.z());
         Point3d startDirectionYZ = Point3d(0.0f, startDirection.y(), startDirection.z());
         GLfloat xAngle = startDirectionYZ.getAngle(directionYZ) * 180 / PI;
+//        cout << "angle is: " << xAngle;
 
         Point3d directionXY = Point3d(direction.x(), direction.y(), 0.0f);
         Point3d startDirectionXY = Point3d(direction.x(), startDirection.y(), 0.0f);
@@ -192,7 +219,7 @@ void Bird::fly(GLfloat tau) {
         sign = (startDirectionXY ^ directionXY).z();
         zAngle = copysign(zAngle, sign);
 
-        glRotatef(xAngle, 1.0f, 0.0f, 0.0f);
+//        glRotatef(xAngle, 1.0f, 0.0f, 0.0f);
         glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
 //        glRotatef(zAngle, 0.0f, 0.0f, 1.0f);
 
@@ -260,24 +287,43 @@ int Bird::orientationTest(Point3d a, Point3d mid, Point3d b) {
 //}
 
 Point3d Bird::flyPath(GLfloat tau) {
-    float xcr, ycr, zcr;   //Points on the Catmull-Rom spline
 
-    if(pathT == 0) indexPath = (indexPath + 1) % maxPath;
+    /* Draw path (for debugging) */
+    glLineWidth(6.0);
+    glColor3f(1.0, 0.0, 1.0);
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < pathLength; ++i) {
+        glVertex3f(path[i].x(), path[i].y(), path[i].z());
+    }
+    glEnd();
 
-    int prev = (indexPath == 0) ? maxPath - 1 : indexPath - 1;
+    float xcr, ycr, zcr;   // Points on the Catmull-Rom spline
+
+    if (pathT == 0) indexPath = (indexPath + 1) % pathLength;
+
+    /*
+     * Four points for interpolation
+     */
+    int prev = (indexPath == 0) ? pathLength - 1 : indexPath - 1;
     Point3d p1 = path[prev];
     Point3d p2 = path[indexPath];
-    Point3d p3 = path[(indexPath + 1) % maxPath];
-    Point3d p4 = path[(indexPath + 2) % maxPath];
+    Point3d p3 = path[(indexPath + 1) % pathLength];
+    Point3d p4 = path[(indexPath + 2) % pathLength];
 
+    /*
+     * If we just changed pair of points, compute new speed between them
+     */
     if (pathT == 0) {
        float distance = (p3 - p2).norm();
+       std::cout << "Current: " << p2;
        speed = ceil(distance * 15);
-       cout << speed << ' ' << distance << endl;
+       // std::cout << speed << ' ' << distance << std::endl;
     }
 
+    /*
+     * Do interpolation
+     */
     float t = (float)pathT / (float)speed;  //Interpolation parameter
-
     xcr = p2.x() + 0.5*t*(-p1.x()+p3.x())
             + t*t*(p1.x() - 2.5*p2.x() + 2*p3.x() - 0.5*p4.x())
             + t*t*t*(-0.5*p1.x() + 1.5*p2.x() - 1.5*p3.x() + 0.5*p4.x());
@@ -288,59 +334,7 @@ Point3d Bird::flyPath(GLfloat tau) {
             + t*t*(p1.z() - 2.5*p2.z() + 2*p3.z() - 0.5*p4.z())
             + t*t*t*(-0.5*p1.z() + 1.5*p2.z() - 1.5*p3.z() + 0.5*p4.z());
 
-
+    // Increment step between current pair of points, return current point between pair
     pathT = (pathT + 1) % speed;
     return Point3d(xcr, ycr, zcr);
 }
-
-/*
- * Return position relative to the given tau
- */
-//Point3d Bird::flyPath(GLfloat tau) {
-
-
-//    // initialization position
-//    if (tau == 0.0f) {
-//        return path[indexPath++];
-//    }
-
-//    Point3d nextPath = path[indexPath];
-
-//    Point3d nextPosition;
-
-//    if (forwarding) {
-//        // orientation test
-//        double orientation = orientationTest(position, position + direction, nextPath);
-
-//        if (orientation == 0) {
-//            // go straight
-
-//            // calculate next point
-//            nextPosition += position + direction * speed;
-
-//            if (((nextPath.x() <= nextPosition.x() && nextPath.x() >= position.x()) || (nextPath.x() >= nextPosition.x() && nextPath.x() <= position.x())) &&
-//                ((nextPath.z() <= nextPosition.z() && nextPath.z() >= position.z()) || (nextPath.z() >= nextPosition.z() && nextPath.z() <= position.z()))) {
-//                // check if next point overtake the nextPath
-//                // if so, select a new path
-//                indexPath = (indexPath + 1) % maxPath;
-//            }
-
-//        } else {
-//            // the points are not colinear
-//            forwarding = false;
-//            // may add random radius
-//            radius = 4;
-//        }
-//    }
-
-//    if (!forwarding) {
-//        // turn
-//        direction = (nextPath - position).normalized();
-//        nextPosition += position + direction * speed;
-//        forwarding = true;
-//    }
-
-//    // remember to increment indexPath!!!!!
-
-//    return nextPosition;
-//}

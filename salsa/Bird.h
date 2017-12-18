@@ -25,19 +25,6 @@ class Bird {
         std::cout << "Loaded Bird parts" << std::endl;
 
         startDirection = Point3d(0.0f, 0.0f, 1.0f);
-
-        /* PATH VARIABLES */
-        indexPath = 0;
-        maxPath = 5;
-        path[0] = Point3d(0, 20, -80);
-        path[1] = Point3d(2, 10, -40);
-        path[2] = Point3d(2, 60, -20);
-        path[3] = Point3d(0, 0, 0);
-        path[4] = Point3d(-5, 0, 8);
-        path[5] = Point3d(20, 0, 9);
-
-        pathT = 0;
-
     }
 
     Point3d startDirection;
@@ -90,9 +77,9 @@ class Bird {
     Point3d position;
 
     // path
-    Point3d path[20];
+    std::vector<Point3d> path;
     int indexPath;
-    int maxPath;
+    int pathLength;
     int speed;
     int pathT;
 };
