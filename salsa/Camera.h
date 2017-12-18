@@ -22,7 +22,7 @@ class Camera {
     enum View {
         Side = 0, // View the scene from a side perspective
         Eyes,     // View the scene from the Bird's eyes
-        Above,    // View the scene from an above perspective
+        Follow,    // View the scene from an above perspective
         Manual
     };
 

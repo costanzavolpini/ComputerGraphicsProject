@@ -19,7 +19,7 @@ void Camera::setView(View _view, Bird bird) {
                    0.0f, 1.0f, 0.0f);
             break;
         }
-        case Above: {
+        case Follow: {
             Point3d bird_position = bird.getPosition();
             Point3d camera_above(-25, 10, -25);
             lookAt(camera_above.x(), camera_above.y(), camera_above.z(),
@@ -90,10 +90,22 @@ void Camera::keyPressEvent(QKeyEvent *event, View _view) {
 }
 
 Camera::View Camera::getNextView(View _view) {
-    if (_view == Side) return Eyes;
-    if (_view == Eyes) return Above;
-    if (_view == Above) return Manual;
-    if (_view == Manual) return Side;
+    if (_view == Side) {
+        std::cout << "View: Eyes" << std::endl;
+        return Eyes;
+    }
+    if (_view == Eyes) {
+        std::cout << "View: Flollow" << std::endl;
+        return Follow;
+    }
+    if (_view == Follow) {
+        std::cout << "View: Manual" << std::endl;
+        return Manual;
+    }
+    if (_view == Manual) {
+        std::cout << "View: Side" << std::endl;
+        return Side;
+    }
 }
 
 void Camera::lookAt(const GLdouble eyeX,

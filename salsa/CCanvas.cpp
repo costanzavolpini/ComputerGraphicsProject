@@ -186,7 +186,7 @@ void CCanvas::paintGL() {
     /*
      * Update fog distance according to tau
      */
-    float val = fabs(cos(tau/2)) / 100;
+    float val = fabs(cos(tau/100)) / 100;
     glFogf (GL_FOG_DENSITY, val);
 
     
