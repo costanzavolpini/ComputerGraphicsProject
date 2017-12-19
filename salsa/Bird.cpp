@@ -28,29 +28,25 @@ void Bird::init() {
     //  Points on path
     // ATTENTION: TWO SAME VERTICES IN A ROW CRASH THE APP //
     path.push_back(Point3d( -10,   0,  10 ));
-    path.push_back(Point3d( -20,   0,   5 ));
-    path.push_back(Point3d( -25,   0,  -5 ));
-    path.push_back(Point3d( -30,   0,   0 ));
-    path.push_back(Point3d( -35,   0,   5 ));
-    path.push_back(Point3d( -40,   0,  -5 ));
-    path.push_back(Point3d( -45,   0, -10 ));
-    path.push_back(Point3d( -45,   0, -15 ));
-    path.push_back(Point3d( -40,   0, -20 ));
-    path.push_back(Point3d( -30,   0, -25 ));
-    path.push_back(Point3d( -20,   0, -20 ));
-    path.push_back(Point3d( -10,   0, -25 ));
-    path.push_back(Point3d(  -7,   0, -30 ));
-    path.push_back(Point3d(  -5,   0, -35 ));
-    path.push_back(Point3d(  -2,   0, -45 ));
-    path.push_back(Point3d(   0,   0, -50 ));
-    path.push_back(Point3d(   5,   1, -55 ));
-    path.push_back(Point3d(  10,   3, -60 ));
-    path.push_back(Point3d(  15,   5, -70 ));
-    path.push_back(Point3d(  20,   7, -72 ));
-    path.push_back(Point3d(  22,   9, -75 ));
-    path.push_back(Point3d(  25,  10, -75 ));
-    path.push_back(Point3d(  27,  10, -75 ));
-    path.push_back(Point3d(  30,  10, -70 ));
+    path.push_back(Point3d( -35,   0,  10 ));
+    path.push_back(Point3d( -50,   0,  20 ));
+    path.push_back(Point3d( -70,   0,  40 ));
+    path.push_back(Point3d( -90,   0,  60 ));
+    path.push_back(Point3d(-100,   0,  40 ));
+    path.push_back(Point3d( -90,   0,  20 ));
+    path.push_back(Point3d( -70,   0,  10 ));
+    path.push_back(Point3d( -50,   0,   0 ));
+    path.push_back(Point3d( -40,   5, -20 ));
+    path.push_back(Point3d( -30,   5, -40 ));
+    path.push_back(Point3d( -20,   5, -60 ));
+    path.push_back(Point3d(   0,   5, -70 ));
+    path.push_back(Point3d(  20,   5, -65 ));
+    path.push_back(Point3d(  35,   5, -65 ));
+    path.push_back(Point3d(  50,   10, -80 ));
+    path.push_back(Point3d(  70,   10, -60 ));
+    path.push_back(Point3d(  90,   15, -40 ));
+    path.push_back(Point3d(  80,   12, -30 ));
+    path.push_back(Point3d(  20,    7, -10 ));
 
     // Variables and constants
     indexPath = 0;
