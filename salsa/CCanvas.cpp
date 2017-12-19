@@ -186,11 +186,11 @@ void CCanvas::paintGL() {
     /*
      * Update fog distance according to tau
      */
-    float val = fabs(cos(tau/100)) / 100;
+    float val = (cos(tau/10.0f) + 1.0f) / 150.0f;
     glFogf (GL_FOG_DENSITY, val);
 
     
-
+#if 0
     /*
      * Draw Axes in the global coordinate system
      */
@@ -218,6 +218,7 @@ void CCanvas::paintGL() {
     //        glVertex3f(0.0f, 0.0f, 0.0f);
     //    glEnd();
     glEnable(GL_LIGHTING);
+#endif
 
 
     /*
@@ -241,7 +242,7 @@ void CCanvas::paintGL() {
     sky.getTexture().unbind();
 
     //disable fog
-    glDisable(GL_FOG);
+//    glDisable(GL_FOG);
 
 
     /*
@@ -256,7 +257,7 @@ void CCanvas::paintGL() {
     bird.getTexture().unbind();
 
     //enable fog
-    glEnable(GL_FOG);
+//    glEnable(GL_FOG);
 
     /*
      * Draw Scene
