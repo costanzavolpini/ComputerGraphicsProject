@@ -3,13 +3,14 @@
 
 #include "ObjModel.h"
 #include "texture.hpp"
+#include <iostream>
 
 static std::string parts_path = "./models/bird/eagle/parts_2/";
 static std::string textures_path = "./models/bird/eagle/texture/";
 
 class Bird {
 
-public:
+  public:
     /*
      * Load object files and store vertices, normals, uvs
      */
@@ -36,19 +37,21 @@ public:
     void inc();
     void fly(GLfloat tau);
     Point3d flyPath(GLfloat tau);
-
+    float catmull_interp(float t, float c1, float c2, float c3, float c4);
+    Point3d catmull_point(float t, Point3d p1,  Point3d p2,  Point3d p3,  Point3d p4);
     /* Getters
      */
-    Texture& getTexture() { return this->texture; }
-    Point3d& getDirection() { return this->direction; }
-    Point3d& getPosition() { return this->position; }
+    Texture &getTexture() { return this->texture; }
+    Point3d &getDirection() { return this->direction; }
+    Point3d &getPosition() { return this->position; }
+    int orientationTest(Point3d, Point3d, Point3d);
 
     /* Setters
      */
     void setAnimate(bool animate) { this->animate = animate; }
     void setMove(bool move) { this->move = move; }
 
-private:
+  private:
     // whether to animate the bird (moving wings, tail, ...) or not
     bool animate;
 
@@ -73,6 +76,13 @@ private:
     // current position and direction the bird is facing
     Point3d direction;
     Point3d position;
+
+    // path
+    std::vector<Point3d> path;
+    int indexPath;
+    int pathLength;
+    int speed;
+    int pathT;
 };
 
 #endif // BIRD_H

@@ -16,6 +16,46 @@ void Bird::init() {
 
     psi = 0.0f;
     direction = startDirection;
+
+    /*
+     * Setup path
+     */
+    path.reserve(100);
+
+    // Start point (origin)
+    path.push_back(Point3d(0, 0, 0));
+
+    //  Points on path
+    // ATTENTION: TWO SAME VERTICES IN A ROW CRASH THE APP //
+    path.push_back(Point3d( -10,   0,  10 ));
+    path.push_back(Point3d( -35,   0,  10 ));
+    path.push_back(Point3d( -50,   0,  20 ));
+    path.push_back(Point3d( -70,   0,  40 ));
+    path.push_back(Point3d( -90,   0,  60 ));
+    path.push_back(Point3d(-100,   0,  40 ));
+    path.push_back(Point3d( -90,   0,  20 ));
+    path.push_back(Point3d( -70,   0,  10 ));
+    path.push_back(Point3d( -50,   0,   0 ));
+    path.push_back(Point3d( -40,   5, -20 ));
+    path.push_back(Point3d( -30,   5, -40 ));
+    path.push_back(Point3d( -20,  20, -60 ));
+    path.push_back(Point3d(   0,   5, -70 ));
+    path.push_back(Point3d(  20,   5, -65 ));
+    path.push_back(Point3d(  35,   5, -65 ));
+    path.push_back(Point3d(  50,   10, -80 ));
+    path.push_back(Point3d(  70,   10, -60 ));
+    path.push_back(Point3d(  90,   15, -40 ));
+    path.push_back(Point3d(  80,   12, -30 ));
+    path.push_back(Point3d(  20,    7, -10 ));
+
+    // Variables and constants
+    indexPath = 0;
+    pathT = 0;
+    pathLength = path.size();
+
+    /*
+     * Get first position
+     */
     position = flyPath(0.0f);
 }
 
@@ -39,24 +79,20 @@ void Bird::draw() {
     /*
      * transformations to see bird from different perspectives
      */
-//    GLfloat scale = 0.2f;
-//    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+    //    GLfloat scale = 0.2f;
+    //    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
 
     // oscillate
-//    glRotatef(100*tau, 0.0f, 1.0f, 0.0f);
-//    glRotatef(-45.0f, 0.0f, 1.0f, 0.0f);
-//    glRotatef(50*tau, 1.0f, 0.0f, 0.0f);
-//    glTranslatef(4.0f, 2.0f, 0.0f);
-//    glScalef(scale, scale, scale);
-
-
+    //    glRotatef(100*tau, 0.0f, 1.0f, 0.0f);
+    //    glRotatef(-45.0f, 0.0f, 1.0f, 0.0f);
+    //    glRotatef(50*tau, 1.0f, 0.0f, 0.0f);
+    //    glTranslatef(4.0f, 2.0f, 0.0f);
+    //    glScalef(scale, scale, scale);
 
     /*
      * Slight correction to whole bird (it should not look too much down)
      */
     glRotatef(-6.0f, 1, 0, 0);
-
-
 
     /* Body:
      * - static
@@ -65,12 +101,10 @@ void Bird::draw() {
      */
     glPushMatrix(); // push body
     if (this->animate) {
-      glTranslatef(0.0f, -0.1 * sin(psi), 0.0f);
-      glRotatef(sin(psi), 1.0f, 0.0f, 0.0f);
+        glTranslatef(0.0f, -0.1 * sin(psi), 0.0f);
+        glRotatef(sin(psi), 1.0f, 0.0f, 0.0f);
     }
     body.draw();
-
-
 
     /* Head:
      * - can move (e.g. look a bit around)
@@ -92,8 +126,6 @@ void Bird::draw() {
     tail.draw();
     glPopMatrix();
 
-
-
     /* Left wing:
      * - can move (e.g. up and down)
      * - connection with body at origin
@@ -101,12 +133,12 @@ void Bird::draw() {
      */
     glPushMatrix(); // push left_wing_close
     glTranslatef(0.7f, 0.2f, 0.0f);
-    glRotatef(16.0f, 0.0f, 0.0f, 1.0f);     // Z: + 16.0
-    glRotatef(-6.75f, 0.0f, 1.0f, 0.0f);    // Y: -  6.75
+    glRotatef(16.0f, 0.0f, 0.0f, 1.0f);  // Z: + 16.0
+    glRotatef(-6.75f, 0.0f, 1.0f, 0.0f); // Y: -  6.75
 
     // animation
     if (this->animate) {
-      glRotatef(32*sin(psi), 0.0f, 0.0f, 1.0f);
+        glRotatef(32 * sin(psi), 0.0f, 0.0f, 1.0f);
     }
     left_wing_close.draw();
 
@@ -114,18 +146,16 @@ void Bird::draw() {
      */
     glPushMatrix(); // push left_wing_far
     glTranslatef(1.6f, 0.0f, 1.0f);
-    glRotatef(-12.0f, 0.0f, 0.0f, 1.0f);    // Z: - 12.0
+    glRotatef(-12.0f, 0.0f, 0.0f, 1.0f); // Z: - 12.0
 
     // animation
     if (this->animate) {
-      glRotatef(16*sin(psi), 0.0f, 0.0f, 1.0f);
+        glRotatef(16 * sin(psi), 0.0f, 0.0f, 1.0f);
     }
     left_wing_far.draw();
-    glPopMatrix();  // pop left_wing_far
+    glPopMatrix(); // pop left_wing_far
 
-    glPopMatrix();  // pop left_wing_close
-
-
+    glPopMatrix(); // pop left_wing_close
 
     /* Right wing:
      * - can move (e.g. up and down)
@@ -134,12 +164,12 @@ void Bird::draw() {
      */
     glPushMatrix(); // push right_wing_close
     glTranslatef(-0.7f, 0.2f, 0.0f);
-    glRotatef(-16.0f, 0.0f, 0.0f, 1.0f);    // Z: - 16.0
-    glRotatef(6.75f, 0.0f, 1.0f, 0.0f);     // Y: +  6.75
+    glRotatef(-16.0f, 0.0f, 0.0f, 1.0f); // Z: - 16.0
+    glRotatef(6.75f, 0.0f, 1.0f, 0.0f);  // Y: +  6.75
 
     // animation
     if (this->animate) {
-      glRotatef(32*sin(psi), 0.0f, 0.0f, -1.0f);
+        glRotatef(32 * sin(psi), 0.0f, 0.0f, -1.0f);
     }
     right_wing_close.draw();
 
@@ -147,18 +177,18 @@ void Bird::draw() {
      */
     glPushMatrix(); // push right_wing_far
     glTranslatef(-1.25f, 0.0f, 0.5f);
-    glRotatef(12.0f, 0.0f, 0.0f, 1.0f);     // Z: + 12.0
+    glRotatef(12.0f, 0.0f, 0.0f, 1.0f); // Z: + 12.0
 
     // animation
     if (this->animate) {
-      glRotatef(16*sin(psi), 0.0f, 0.0f, -1.0f);
+        glRotatef(16 * sin(psi), 0.0f, 0.0f, -1.0f);
     }
     right_wing_far.draw();
-    glPopMatrix();  // pop right_wing_far
+    glPopMatrix(); // pop right_wing_far
 
-    glPopMatrix();  // pop right_wing_close
+    glPopMatrix(); // pop right_wing_close
 
-    glPopMatrix();  // pop body
+    glPopMatrix(); // pop body
 }
 
 /*
@@ -179,35 +209,93 @@ void Bird::fly(GLfloat tau) {
         glScalef(scale, scale, scale);
 
         direction = (nextPos - currPos).normalized();
+        Point3d birdLeft = Point3d(0,1,0) ^ direction;
+        Point3d birdUp = direction ^ birdLeft;
 
-        Point3d directionXZ = Point3d(direction.x(), 0.0f, direction.z());
-        Point3d startDirectionXZ = Point3d(startDirection.x(), 0.0f, startDirection.z());
-        GLfloat yAngle = startDirectionXZ.getAngle(directionXZ) * 180/PI;
+        // remember: column-major order!
+        GLfloat matrix[]={
+            (GLfloat)birdLeft.x(), (GLfloat)birdLeft.y(), (GLfloat)birdLeft.z(), 0.0f,     // LEFT
+            (GLfloat)birdUp.x(), (GLfloat)birdUp.y(), (GLfloat)birdUp.z(), 0.0f,           // UP
+            (GLfloat)direction.x(), (GLfloat)direction.y(), (GLfloat)direction.z(), 0.0f,  // FORWARD
+            0, 0, 0, 1};    // TRANSLATION done before
 
-
-
-        GLfloat sign = (startDirectionXZ ^ directionXZ).y();
-        yAngle = copysign(yAngle, sign);
-        glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
+        glMultMatrixf(matrix);
 
         // save position
         this->position = nextPos;
     }
 }
 
-/*
- * Return position relative to the given tau
- */
+int Bird::orientationTest(Point3d a, Point3d mid, Point3d b) {
+    // orientation test on x and z axys
+    // 0: collinear
+    // positive: left
+    // negative: right
+    double cross = (mid.x() - a.x()) * (b.z() - a.z()) - (mid.z() - a.z()) * (b.x() - a.x());
+    if(cross < -0.0001) return -1; // right
+    if(cross > 0.0001) return 1;
+    return 0;                      // collinear
+}
+
 Point3d Bird::flyPath(GLfloat tau) {
-    GLfloat speed = 0.1f;
-    GLfloat amplitude = 50.0f;
-    GLfloat deltaY = 0.0;
-    GLfloat scale = 2 / (3 - cos(2*speed*tau));
-    Point3d translate(0,5,-30);
 
-    Point3d nextPosition(scale * amplitude * cos(speed*tau), deltaY * sin(speed*tau/13) + deltaY, scale * amplitude * sin(2*speed*tau)/2);
-    nextPosition += translate;
+#if 0
+    /* Draw path (for debugging) */
+    glLineWidth(6.0);
+    glColor3f(1.0, 0.0, 1.0);
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < pathLength; ++i) {
+        glVertex3f(path[i].x(), path[i].y(), path[i].z());
+    }
+    glEnd();
+#endif
 
-    return nextPosition;
-//    return Point3d(4*cos(tau), 0, 4*sin(tau));
+    float xcr, ycr, zcr;   // Points on the Catmull-Rom spline
+
+    if (pathT == 0) indexPath = (indexPath + 1) % pathLength;
+
+    /*
+     * Four points for interpolation
+     */
+    int prev = (indexPath == 0) ? pathLength - 1 : indexPath - 1;
+    Point3d p1 = path[prev];
+    Point3d p2 = path[indexPath];
+    Point3d p3 = path[(indexPath + 1) % pathLength];
+    Point3d p4 = path[(indexPath + 2) % pathLength];
+
+    /*
+     * If we just changed pair of points, compute new speed between them
+     */
+    if (pathT == 0) {
+       Point3d p2_25 = catmull_point(0.25, p1, p2, p3, p4);
+       Point3d p2_5 = catmull_point(0.5, p1, p2, p3, p4);
+       Point3d p2_75 = catmull_point(0.75, p1, p2, p3, p4);
+       float distance = (p3 - p2_75).norm() + (p2_75 - p2_5).norm() + (p2_5 - p2_25).norm() + (p2_25 - p2).norm();
+       std::cout << "Current: " << p2;
+       speed = ceil(distance * 10);
+//       speed = 50;
+        std::cout << speed << ' ' << distance << std::endl;
+    }
+
+    /*
+     * Do interpolation
+     */
+    float t = (float)pathT / (float)speed;  //Interpolation parameter
+    xcr = catmull_interp(t, p1.x(), p2.x(), p3.x(), p4.x());
+    ycr = catmull_interp(t, p1.y(), p2.y(), p3.y(), p4.y());
+    zcr = catmull_interp(t, p1.z(), p2.z(), p3.z(), p4.z());
+
+    // Increment step between current pair of points, return current point between pair
+    pathT = (pathT + 1) % speed;
+    return Point3d(xcr, ycr, zcr);
+}
+
+float Bird::catmull_interp(float t, float c1, float c2, float c3, float c4) {
+    return c2 + 0.5*t*(-c1 + c3) + t * t * (c1 - 2.5 * c2 + 2 * c3 - 0.5 * c4)
+            + t * t * t * (-0.5 * c1 + 1.5 * c2 - 1.5 * c3 + 0.5 * c4);
+}
+
+Point3d Bird::catmull_point(float t, Point3d p1,  Point3d p2,  Point3d p3,  Point3d p4) {
+    return Point3d(catmull_interp(t, p1.x(), p2.x(), p3.x(), p4.x()), catmull_interp(t, p1.y(), p2.y(), p3.y(), p4.y()),
+                   catmull_interp(t, p1.z(), p2.z(), p3.z(), p4.z()));
 }
