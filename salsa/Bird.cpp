@@ -38,7 +38,7 @@ void Bird::init() {
     path.push_back(Point3d( -50,   0,   0 ));
     path.push_back(Point3d( -40,   5, -20 ));
     path.push_back(Point3d( -30,   5, -40 ));
-    path.push_back(Point3d( -20,   5, -60 ));
+    path.push_back(Point3d( -20,  20, -60 ));
     path.push_back(Point3d(   0,   5, -70 ));
     path.push_back(Point3d(  20,   5, -65 ));
     path.push_back(Point3d(  35,   5, -65 ));
@@ -209,33 +209,17 @@ void Bird::fly(GLfloat tau) {
         glScalef(scale, scale, scale);
 
         direction = (nextPos - currPos).normalized();
+        Point3d birdLeft = Point3d(0,1,0) ^ direction;
+        Point3d birdUp = direction ^ birdLeft;
 
-        Point3d directionXZ = Point3d(direction.x(), 0.0f, direction.z());
-        Point3d startDirectionXZ = Point3d(startDirection.x(), 0.0f, startDirection.z());
-        GLfloat yAngle = startDirectionXZ.getAngle(directionXZ) * 180 / PI;
+        // remember: column-major order!
+        GLfloat matrix[]={
+            (GLfloat)birdLeft.x(), (GLfloat)birdLeft.y(), (GLfloat)birdLeft.z(), 0.0f,     // LEFT
+            (GLfloat)birdUp.x(), (GLfloat)birdUp.y(), (GLfloat)birdUp.z(), 0.0f,           // UP
+            (GLfloat)direction.x(), (GLfloat)direction.y(), (GLfloat)direction.z(), 0.0f,  // FORWARD
+            0, 0, 0, 1};    // TRANSLATION done before
 
-        Point3d directionYZ = Point3d(0.0f, direction.y(), direction.z());
-        Point3d startDirectionYZ = Point3d(0.0f, startDirection.y(), startDirection.z());
-        GLfloat xAngle = startDirectionYZ.getAngle(directionYZ) * 180 / PI;
-//        cout << "angle is: " << xAngle;
-
-        Point3d directionXY = Point3d(direction.x(), direction.y(), 0.0f);
-        Point3d startDirectionXY = Point3d(direction.x(), startDirection.y(), 0.0f);
-        GLfloat zAngle = startDirectionXY.getAngle(directionXY) * 180 / PI;
-
-
-        GLfloat sign = (startDirectionXZ ^ directionXZ).y();
-        yAngle = copysign(yAngle, sign);
-
-        sign = (startDirectionYZ ^ directionYZ).x();
-        xAngle = copysign(xAngle, sign);
-
-        sign = (startDirectionXY ^ directionXY).z();
-        zAngle = copysign(zAngle, sign);
-
-//        glRotatef(xAngle, 1.0f, 0.0f, 0.0f);
-        glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
-//        glRotatef(zAngle, 0.0f, 0.0f, 1.0f);
+        glMultMatrixf(matrix);
 
         // save position
         this->position = nextPos;
@@ -255,6 +239,7 @@ int Bird::orientationTest(Point3d a, Point3d mid, Point3d b) {
 
 Point3d Bird::flyPath(GLfloat tau) {
 
+#if 0
     /* Draw path (for debugging) */
     glLineWidth(6.0);
     glColor3f(1.0, 0.0, 1.0);
@@ -263,6 +248,7 @@ Point3d Bird::flyPath(GLfloat tau) {
         glVertex3f(path[i].x(), path[i].y(), path[i].z());
     }
     glEnd();
+#endif
 
     float xcr, ycr, zcr;   // Points on the Catmull-Rom spline
 
@@ -286,7 +272,7 @@ Point3d Bird::flyPath(GLfloat tau) {
        Point3d p2_75 = catmull_point(0.75, p1, p2, p3, p4);
        float distance = (p3 - p2_75).norm() + (p2_75 - p2_5).norm() + (p2_5 - p2_25).norm() + (p2_25 - p2).norm();
        std::cout << "Current: " << p2;
-       speed = ceil(distance * 20);
+       speed = ceil(distance * 10);
 //       speed = 50;
         std::cout << speed << ' ' << distance << std::endl;
     }
