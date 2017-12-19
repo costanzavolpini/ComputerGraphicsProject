@@ -257,53 +257,6 @@ int Bird::orientationTest(Point3d a, Point3d mid, Point3d b) {
     return 0;                      // collinear
 }
 
-//void Bird::test() {
-//    float xcr, ycr;   //Points on the Catmull-Rom spline
-//    float dx, dy;     //tangent components
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    glMatrixMode(GL_MODELVIEW);
-//    glLoadIdentity();
-
-//    glPointSize(6.0);
-//    glColor3f(1.0, 0.0, 1.0);
-//    glBegin(GL_POINTS);
-//    for(int i = 0; i < numPts; i++)
-//           glVertex2f(x[i], y[i]);
-//    glEnd();
-
-//    if(numPts > 3)
-//    {
-//       glColor3f(1.,0.,0.);
-//       glBegin(GL_LINES); //draw tangents
-//       for(int i = 1; i < numPts-1; i++){
-//           dx = 0.2*(x[i+1]-x[i-1]);
-//           dy = 0.2*(y[i+1]-y[i-1]);
-//           glVertex2f(x[i]-dx, y[i]-dy);
-//           glVertex2f(x[i]+dx,y[i]+dy);
-//        }
-//        glEnd();
-
-//        glColor3f(0., 0., 1.);
-//        glBegin(GL_LINE_STRIP);
-//        for(int i = 1; i < numPts-2; i++)
-//        {
-//            for(int k = 0;  k < 50; k++){    //50 points
-//               float t = k*0.02;  //Interpolation parameter
-//               //--Eq. (7.34)--
-//               xcr = x[i] + 0.5*t*(-x[i-1]+x[i+1])
-//                   + t*t*(x[i-1] - 2.5*x[i] + 2*x[i+1] - 0.5*x[i+2])
-//                   + t*t*t*(-0.5*x[i-1] + 1.5*x[i] - 1.5*x[i+1] + 0.5*x[i+2]);
-//               ycr = y[i] + 0.5*t*(-y[i-1]+y[i+1])
-//                   + t*t*(y[i-1] - 2.5*y[i] + 2*y[i+1] - 0.5*y[i+2])
-//                   + t*t*t*(-0.5*y[i-1] + 1.5*y[i] - 1.5*y[i+1] + 0.5*y[i+2]);
-//               glVertex2f(xcr, ycr);
-//           }
-//        }
-//        glEnd();
-//    }
-//    glFlush();
-//}
-
 Point3d Bird::flyPath(GLfloat tau) {
 
     /* Draw path (for debugging) */
@@ -337,8 +290,9 @@ Point3d Bird::flyPath(GLfloat tau) {
        Point3d p2_75 = catmull_point(0.75, p1, p2, p3, p4);
        float distance = (p3 - p2_75).norm() + (p2_75 - p2_5).norm() + (p2_5 - p2_25).norm() + (p2_25 - p2).norm();
        std::cout << "Current: " << p2;
-       speed = ceil(distance * 15);
-       // std::cout << speed << ' ' << distance << std::endl;
+       speed = ceil(distance * 20);
+//       speed = 50;
+        std::cout << speed << ' ' << distance << std::endl;
     }
 
     /*
