@@ -1,15 +1,13 @@
-# fly-like-a-bird
-I believe I can fly, I believe I can touch the sky
+# FLY LIKE A BIRD
+## USI | Computer Graphics
+Project realized in context of the bachelor course Computer Graphics at USI (Fall Semester 2017/2018). 
+Professor: Kai Hormann
 
-### Cut (Blender)
-1. tab to enter in 'edit mode'
-2. CTRL+R
-3. click left
-4. V
-5. click right
-6. CTRL + L
-7. P
-
+Team: Valerie Burgener, Aron Fiechter, Costanza Volpini and Marco Tollini
 
 ### Download model:
 https://filedn.com/lXE33vJSKAGY4tsHPBP3yBb/mountains.obj
+
+<video width="320" height="240" controls>
+  <source src="https://github.com/costanzavolpini/fly-like-a-bird/blob/master/Eagle.mp4" type="video/mp4">
+</video>
