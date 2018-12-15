@@ -3,7 +3,7 @@
 Project realized in context of the bachelor course Computer Graphics at USI (Fall Semester 2017/2018). <br>
 Professor: Kai Hormann<br>
 <br>
-Team: Valerie Burgener, Aron Fiechter, Costanza Volpini and Marco Tollini
+Team: [Valerie Burgener](https://github.com/Shelyo), [Aron Fiechter](https://github.com/LambdaFalcon), Costanza Volpini and [Marco Tollini](https://github.com/marcotollini)
 
 [Video of the project](https://github.com/costanzavolpini/fly-like-a-bird/blob/master/Eagle.mp4)
 
